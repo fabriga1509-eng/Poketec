@@ -107,10 +107,13 @@ global pokemon3
 pokemon3 = None # variable global para guardar el pokemon seleccionado
 global nombre_jugador
 nombre_jugador = None # variable global para guardar el nombre del jugador
+text_batalla = f"{nombre_jugador} vs Steven"
 
 from tkinter import *
 from os import path #para poner la imagen de fondo
 from time import sleep 
+import random 
+
 # Ruta base del script (útil para localizar el archivo de audio)
 BASE_DIR = path.dirname(path.abspath(__file__))
 PROJECT_ROOT = BASE_DIR  # si tus scripts están en la raíz
@@ -661,7 +664,25 @@ def ventana_batalla():
     fondo_batalla_img = PhotoImage(file=fondo_batalla)
     canvas_menu.create_image(0, 0, anchor=NW, image=fondo_batalla_img)
     canvas_menu.fondo_batalla = fondo_batalla_img
-
+    steven = asset_path(SPRITES_DIR, "Spr_RS_Steven.png")
+    steven_img = PhotoImage(file=steven)
+    canvas_menu.create_image(400, 100, anchor=NW, image=steven_img)
+    canvas_menu.steven = steven_img
+    if personaje_seleccionado == "Red":
+        personaje_img = asset_path(SPRITES_DIR, "E_Red_Back.png")
+    elif personaje_seleccionado == "Leaf":
+        personaje_img = asset_path(SPRITES_DIR, "E_Leaf_Back.png")
+    elif personaje_seleccionado == "Brendan":
+        personaje_img = asset_path(SPRITES_DIR, "E_Brendan_Back.png")
+    elif personaje_seleccionado == "May":
+        personaje_img = asset_path(SPRITES_DIR, "E_May_Back.png")
+    elif personaje_seleccionado == "Wally":
+        personaje_img = asset_path(SPRITES_DIR, "RS_Wally_Back.png")
+    personaje_img = PhotoImage(file=personaje_img)
+    canvas_menu.create_image(100, 300, anchor=NW, image=personaje_img)
+    canvas_menu.personaje = personaje_img
+    label_batalla = Label(canvas_menu, text=text_batalla, font=('Arial', 12), bg='white')
+    label_batalla.pack(pady=10)
 
 
 def ventana_error_batalla():
