@@ -109,7 +109,7 @@ global nombre_jugador
 nombre_jugador = None # variable global para guardar el nombre del jugador
 
 from tkinter import *
-from os import path #para poner la imagen de fondo
+from os import path #para los archivos de audio e imágenes
 from time import sleep 
 import random 
 
@@ -682,8 +682,19 @@ def ventana_batalla():
     canvas_menu.personaje = personaje_img
     label_batalla = Label(canvas_menu, text="¡Prepárate para la batalla!", font=('Arial', 12), bg='white')
     label_batalla.place(x=10, y=10)
-
-
+    def continuar_batalla():
+        label_batalla.destroy()
+        boton_continuar.destroy()
+        label_seleccion = Label(canvas_menu, text="selecciona que pokemon quieres usar", font=('Arial', 12), bg='white')
+        label_seleccion.place(x=10, y=40)
+        boton_pokemon1 = Button(canvas_menu, text=pokemon1, command=lambda: print("Seleccionaste", pokemon1))
+        boton_pokemon1.place(x=10, y=70)
+        boton_pokemon2 = Button(canvas_menu, text=pokemon2, command=lambda: print("Seleccionaste", pokemon2))
+        boton_pokemon2.place(x=10, y=100)
+        boton_pokemon3 = Button(canvas_menu, text=pokemon3, command=lambda: print("Seleccionaste", pokemon3))
+        boton_pokemon3.place(x=10, y=130)
+    boton_continuar = Button(canvas_menu, text="Continuar", command=continuar_batalla)
+    boton_continuar.place(x=10, y=500)
 def ventana_error_batalla():
     ventana_error = Toplevel()
     ventana_error.title("Error")
