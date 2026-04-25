@@ -107,7 +107,6 @@ global pokemon3
 pokemon3 = None # variable global para guardar el pokemon seleccionado
 global nombre_jugador
 nombre_jugador = None # variable global para guardar el nombre del jugador
-text_batalla = f"{nombre_jugador} vs Steven"
 
 from tkinter import *
 from os import path #para poner la imagen de fondo
@@ -681,8 +680,8 @@ def ventana_batalla():
     personaje_img = PhotoImage(file=personaje_img)
     canvas_menu.create_image(100, 300, anchor=NW, image=personaje_img)
     canvas_menu.personaje = personaje_img
-    label_batalla = Label(canvas_menu, text=text_batalla, font=('Arial', 12), bg='white')
-    label_batalla.pack(pady=10)
+    label_batalla = Label(canvas_menu, text="¡Prepárate para la batalla!", font=('Arial', 12), bg='white')
+    label_batalla.place(x=10, y=10)
 
 
 def ventana_error_batalla():
