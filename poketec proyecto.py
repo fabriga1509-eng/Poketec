@@ -5,97 +5,26 @@ Introducción a la programación
 Fabricio Guillén Acevedo 2026005221
 Profesor: Leornardo Araya
 """
-stats_venusaur = {
-    "HP": 80,
-    "Attack": 82,
-    "Defense": 83,
+stats = {
+    "Venusaur": {"HP": 80, "Attack": 82, "Defense": 83},
+    "Charizard": {"HP": 78, "Attack": 84, "Defense": 78},
+    "Blastoise": {"HP": 79, "Attack": 83, "Defense": 100},
+    "Pidgeot": {"HP": 83, "Attack": 80, "Defense": 75},
+    "Rhydon": {"HP": 105, "Attack": 130, "Defense": 120},
+    "Chansey": {"HP": 250, "Attack": 5, "Defense": 5},
+    "Snorlax": {"HP": 160, "Attack": 110, "Defense": 65},
+    "Pikachu": {"HP": 35, "Attack": 55, "Defense": 40},
+    "Nidoking": {"HP": 81, "Attack": 102, "Defense": 77},
+    "Machamp": {"HP": 90, "Attack": 130, "Defense": 80},
+    "Mewtwo": {"HP": 106, "Attack": 150, "Defense": 90},
+    "Moltres": {"HP": 90, "Attack": 120, "Defense": 90},
+    "Rapidash": {"HP": 65, "Attack": 100, "Defense": 70},
+    "Articuno": {"HP": 90, "Attack": 85, "Defense": 100},
+    "Zapdos": {"HP": 90, "Attack": 100, "Defense": 85},
+    "Dragonite": {"HP": 91, "Attack": 134, "Defense": 95},
+    "Nidoqueen": {"HP": 90, "Attack": 92, "Defense": 87},
+    "Slowbro": {"HP": 95, "Attack": 75, "Defense": 110},
 }
-stats_charizard = {
-    "HP": 78,
-    "Attack": 84,
-    "Defense": 78,
-}
-stats_blastoise = {
-    "HP": 79,
-    "Attack": 83,
-    "Defense": 100,
-}
-stats_pidgeot = {
-    "HP": 83,
-    "Attack": 80,
-    "Defense": 75,
-}
-stats_rydhon = {
-    "HP": 105,
-    "Attack": 130,
-    "Defense": 120,
-}
-stats_chansey = {
-    "HP": 250,
-    "Attack": 5,
-    "Defense": 5,
-}
-stats_snorlax = {
-    "HP": 160,
-    "Attack": 110,
-    "Defense": 65,
-}
-stats_pikachu = {
-    "HP": 35,
-    "Attack": 55,
-    "Defense": 40,
-}
-stats_nidoking = {
-    "HP": 81,
-    "Attack": 102,
-    "Defense": 77,
-}
-stats_machamp = {
-    "HP": 90,
-    "Attack": 130,
-    "Defense": 80,
-}
-stats_mewtwo = {
-    "HP": 106,
-    "Attack": 150,
-    "Defense": 90,
-}
-stats_moltres = {
-    "HP": 90,
-    "Attack": 120,
-    "Defense": 90,
-}
-stats_rapidash = {
-    "HP": 65,
-    "Attack": 100,
-    "Defense": 70,
-}
-stats_articuno = {
-    "HP": 90,
-    "Attack": 85,
-    "Defense": 100,
-}
-stats_zapdos = {
-    "HP": 90,
-    "Attack": 100,
-    "Defense": 85,
-}
-stats_dragonite = {
-    "HP": 91,
-    "Attack": 134,
-    "Defense": 95,
-}
-stats_nidoqueen = {
-    "HP": 90,
-    "Attack": 92,
-    "Defense": 87,
-}
-stats_slowbro = {
-    "HP": 95,
-    "Attack": 75,
-    "Defense": 110,
-}
-
 Mejores_puntajes = []
 vent_personajes = "Elige tu personaje"
 personaje_seleccionado = None # variable global para guardar el personaje seleccionado
@@ -385,7 +314,7 @@ def estadisticas_venasour():
     ventana_venasour.geometry("300x400")
     label_venasour = Label(ventana_venasour, text="Estadísticas de Venusaur", font=('Arial', 12))
     label_venasour.pack(pady=10)
-    label_stats = Label(ventana_venasour, text=f"HP: {stats_venusaur['HP']}\n Attack: {stats_venusaur['Attack']}\n Defense: {stats_venusaur['Defense']}", font=('Arial', 10))
+    label_stats = Label(ventana_venasour, text= f"HP: {stats['Venusaur']['HP']}\n Attack: {stats['Venusaur']['Attack']}\n Defense: {stats['Venusaur']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
     boton_cerrar = Button(ventana_venasour, text="Cerrar", command=ventana_venasour.destroy)
     boton_cerrar.pack(pady=10)
@@ -410,7 +339,7 @@ def estadisticas_charizard():
     ventana_charizard.geometry("300x400")
     label_charizard = Label(ventana_charizard, text="Estadísticas de Charizard", font=('Arial', 12))
     label_charizard.pack(pady=10)
-    label_stats = Label(ventana_charizard, text=f"HP: {stats_charizard['HP']}\n Attack: {stats_charizard['Attack']}\n Defense: {stats_charizard['Defense']}", font=('Arial', 10))
+    label_stats = Label(ventana_charizard, text=f"HP: {stats['Charizard']['HP']}\n Attack: {stats['Charizard']['Attack']}\n Defense: {stats['Charizard']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
     boton_cerrar = Button(ventana_charizard, text="Cerrar", command=ventana_charizard.destroy)
     boton_cerrar.pack(pady=10)
@@ -435,7 +364,7 @@ def estadisticas_blastoise():
     ventana_blastoise.geometry("300x400")
     label_blastoise = Label(ventana_blastoise, text="Estadísticas de Blastoise", font=('Arial', 12))
     label_blastoise.pack(pady=10)
-    label_stats = Label(ventana_blastoise, text=f"HP: {stats_blastoise['HP']}\n Attack: {stats_blastoise['Attack']}\n Defense: {stats_blastoise['Defense']}", font=('Arial', 10))
+    label_stats = Label(ventana_blastoise, text=f"HP: {stats['Blastoise']['HP']}\n Attack: {stats['Blastoise']['Attack']}\n Defense: {stats['Blastoise']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
     boton_cerrar = Button(ventana_blastoise, text="Cerrar", command=ventana_blastoise.destroy)
     boton_cerrar.pack(pady=10)
@@ -460,7 +389,7 @@ def estadisticas_pidgeot():
     ventana_pidgeot.geometry("300x400")
     label_pidgeot = Label(ventana_pidgeot, text="Estadísticas de Pidgeot", font=('Arial', 12))
     label_pidgeot.pack(pady=10)
-    label_stats = Label(ventana_pidgeot, text=f"HP: {stats_pidgeot['HP']}\n Attack: {stats_pidgeot['Attack']}\n Defense: {stats_pidgeot['Defense']}", font=('Arial', 10))
+    label_stats = Label(ventana_pidgeot, text=f"HP: {stats['Pidgeot']['HP']}\n Attack: {stats['Pidgeot']['Attack']}\n Defense: {stats['Pidgeot']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
     boton_cerrar = Button(ventana_pidgeot, text="Cerrar", command=ventana_pidgeot.destroy)
     boton_cerrar.pack(pady=10)
@@ -485,7 +414,7 @@ def estadisticas_rydhon():
     ventana_rydhon.geometry("300x400")
     label_rydhon = Label(ventana_rydhon, text="Estadísticas de Rydhon", font=('Arial', 12))
     label_rydhon.pack(pady=10)
-    label_stats = Label(ventana_rydhon, text=f"HP: {stats_rydhon['HP']}\n Attack: {stats_rydhon['Attack']}\n Defense: {stats_rydhon['Defense']}", font=('Arial', 10))
+    label_stats = Label(ventana_rydhon, text=f"HP: {stats['Rhydon']['HP']}\n Attack: {stats['Rhydon']['Attack']}\n Defense: {stats['Rhydon']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
     boton_cerrar = Button(ventana_rydhon, text="Cerrar", command=ventana_rydhon.destroy)
     boton_cerrar.pack(pady=10)
@@ -510,7 +439,7 @@ def estadisticas_chansey():
     ventana_chansey.geometry("300x400")
     label_chansey = Label(ventana_chansey, text="Estadísticas de Chansey", font=('Arial', 12))
     label_chansey.pack(pady=10)
-    label_stats = Label(ventana_chansey, text=f"HP: {stats_chansey['HP']}\n Attack: {stats_chansey['Attack']}\n Defense: {stats_chansey['Defense']}", font=('Arial', 10))
+    label_stats = Label(ventana_chansey, text=f"HP: {stats['Chansey']['HP']}\n Attack: {stats['Chansey']['Attack']}\n Defense: {stats['Chansey']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
     boton_cerrar = Button(ventana_chansey, text="Cerrar", command=ventana_chansey.destroy)
     boton_cerrar.pack(pady=10)
@@ -535,7 +464,7 @@ def estadisticas_snorlax():
     ventana_snorlax.geometry("300x400")
     label_snorlax = Label(ventana_snorlax, text="Estadísticas de Snorlax", font=('Arial', 12))
     label_snorlax.pack(pady=10)
-    label_stats = Label(ventana_snorlax, text=f"HP: {stats_snorlax['HP']}\n Attack: {stats_snorlax['Attack']}\n Defense: {stats_snorlax['Defense']}", font=('Arial', 10))
+    label_stats = Label(ventana_snorlax, text=f"HP: {stats['Snorlax']['HP']}\n Attack: {stats['Snorlax']['Attack']}\n Defense: {stats['Snorlax']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
     boton_cerrar = Button(ventana_snorlax, text="Cerrar", command=ventana_snorlax.destroy)
     boton_cerrar.pack(pady=10)
@@ -560,7 +489,7 @@ def estadisticas_pikachu():
     ventana_pikachu.geometry("300x400")
     label_pikachu = Label(ventana_pikachu, text="Estadísticas de Pikachu", font=('Arial', 12))
     label_pikachu.pack(pady=10)
-    label_stats = Label(ventana_pikachu, text=f"HP: {stats_pikachu['HP']}\n Attack: {stats_pikachu['Attack']}\n Defense: {stats_pikachu['Defense']}", font=('Arial', 10))
+    label_stats = Label(ventana_pikachu, text=f"HP: {stats['Pikachu']['HP']}\n Attack: {stats['Pikachu']['Attack']}\n Defense: {stats['Pikachu']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
     boton_cerrar = Button(ventana_pikachu, text="Cerrar", command=ventana_pikachu.destroy)
     boton_cerrar.pack(pady=10)
@@ -585,7 +514,7 @@ def estadisticas_nidoking():
     ventana_nidoking.geometry("300x400")
     label_nidoking = Label(ventana_nidoking, text="Estadísticas de Nidoking", font=('Arial', 12))
     label_nidoking.pack(pady=10)
-    label_stats = Label(ventana_nidoking, text=f"HP: {stats_nidoking['HP']}\n Attack: {stats_nidoking['Attack']}\n Defense: {stats_nidoking['Defense']}", font=('Arial', 10))
+    label_stats = Label(ventana_nidoking, text=f"HP: {stats['Nidoking']['HP']}\n Attack: {stats['Nidoking']['Attack']}\n Defense: {stats['Nidoking']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
     boton_cerrar = Button(ventana_nidoking, text="Cerrar", command=ventana_nidoking.destroy)
     boton_cerrar.pack(pady=10)
@@ -610,12 +539,13 @@ def estadisticas_machamp():
     ventana_machamp.geometry("300x400")
     label_machamp = Label(ventana_machamp, text="Estadísticas de Machamp", font=('Arial', 12))
     label_machamp.pack(pady=10)
-    label_stats = Label(ventana_machamp, text=f"HP: {stats_machamp['HP']}\n Attack: {stats_machamp['Attack']}\n Defense: {stats_machamp['Defense']}", font=('Arial', 10))
+    label_stats = Label(ventana_machamp, text=f"HP: {stats['Machamp']['HP']}\n Attack: {stats['Machamp']['Attack']}\n Defense: {stats['Machamp']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
     boton_cerrar = Button(ventana_machamp, text="Cerrar", command=ventana_machamp.destroy)
     boton_cerrar.pack(pady=10)
     boton_seleccionar = Button(ventana_machamp, text="Seleccionar", command=lambda: (selección_machamp(), ventana_machamp.destroy()))
     boton_seleccionar.pack(pady=10)
+
 
 def ventana_puntajes(): #muestra la ventana de puntajes, por ahora solo es un placeholder sin funcionalidad real
     ventana_puntaje = Toplevel()
@@ -686,15 +616,17 @@ def ventana_batalla():
         label_batalla.destroy()
         boton_continuar.destroy()
         label_seleccion = Label(canvas_menu, text="selecciona que pokemon quieres usar", font=('Arial', 12), bg='white')
-        label_seleccion.place(x=10, y=40)
+        label_seleccion.place(x=10, y=400)
         boton_pokemon1 = Button(canvas_menu, text=pokemon1, command=lambda: print("Seleccionaste", pokemon1))
-        boton_pokemon1.place(x=10, y=70)
+        boton_pokemon1.place(x=10, y=430)
         boton_pokemon2 = Button(canvas_menu, text=pokemon2, command=lambda: print("Seleccionaste", pokemon2))
-        boton_pokemon2.place(x=10, y=100)
+        boton_pokemon2.place(x=10, y=460)
         boton_pokemon3 = Button(canvas_menu, text=pokemon3, command=lambda: print("Seleccionaste", pokemon3))
-        boton_pokemon3.place(x=10, y=130)
+        boton_pokemon3.place(x=10, y=490)
+        
     boton_continuar = Button(canvas_menu, text="Continuar", command=continuar_batalla)
     boton_continuar.place(x=10, y=500)
+
 def ventana_error_batalla():
     ventana_error = Toplevel()
     ventana_error.title("Error")
