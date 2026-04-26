@@ -28,12 +28,8 @@ stats = {
 Mejores_puntajes = []
 vent_personajes = "Elige tu personaje"
 personaje_seleccionado = None # variable global para guardar el personaje seleccionado
-global pokemon1
-pokemon1 = None # variable global para guardar el pokemon seleccionado
-global pokemon2
-pokemon2 = None # variable global para guardar el pokemon seleccionado
-global pokemon3
-pokemon3 = None # variable global para guardar el pokemon seleccionado
+global pokemones_jugador
+pokemones_jugador = []
 global nombre_jugador
 nombre_jugador = None # variable global para guardar el nombre del jugador
 
@@ -298,17 +294,13 @@ def ventana_pokemon():
 
 def estadisticas_venasour():
     def selección_venasour():
-        global pokemon1, pokemon2, pokemon3
-        if pokemon1 is None:
-            pokemon1 = "Venusaur"
-        elif pokemon1 is not None and pokemon2 is None:
-            pokemon2 = "Venusaur"
-        elif pokemon1 is not None and pokemon2 is not None and pokemon3 is None:
-            pokemon3 = "Venusaur"
-        else:
+        global pokemones_jugador
+        if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_venasour.destroy()
-        print("Pokemon seleccionado:", pokemon1, pokemon2, pokemon3)
+        else:
+            pokemones_jugador.append("Venasour")
+        print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_venasour = Toplevel()
     ventana_venasour.title("Estadísticas de Venusaur")
     ventana_venasour.geometry("300x400")
@@ -323,17 +315,13 @@ def estadisticas_venasour():
 
 def estadisticas_charizard():
     def selección_charizard():
-        global pokemon1, pokemon2, pokemon3
-        if pokemon1 is None:
-            pokemon1 = "Charizard"
-        elif pokemon1 is not None and pokemon2 is None:
-            pokemon2 = "Charizard"
-        elif pokemon1 is not None and pokemon2 is not None and pokemon3 is None:
-            pokemon3 = "Charizard"
-        else:
+        global pokemones_jugador
+        if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_charizard.destroy()
-        print("Pokemon seleccionado:", pokemon1, pokemon2, pokemon3)
+        else:
+            pokemones_jugador.append("Charizard")
+        print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_charizard = Toplevel()
     ventana_charizard.title("Estadísticas de Charizard")
     ventana_charizard.geometry("300x400")
@@ -348,17 +336,13 @@ def estadisticas_charizard():
 
 def estadisticas_blastoise():
     def selección_blastoise():
-        global pokemon1, pokemon2, pokemon3
-        if pokemon1 is None:
-            pokemon1 = "Blastoise"
-        elif pokemon1 is not None and pokemon2 is None:
-            pokemon2 = "Blastoise"
-        elif pokemon1 is not None and pokemon2 is not None and pokemon3 is None:
-            pokemon3 = "Blastoise"
-        else:
+        global pokemones_jugador
+        if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_blastoise.destroy()
-        print("Pokemon seleccionado:", pokemon1, pokemon2, pokemon3)
+        else:
+            pokemones_jugador.append("Blastoise")
+        print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_blastoise = Toplevel()
     ventana_blastoise.title("Estadísticas de Blastoise")
     ventana_blastoise.geometry("300x400")
@@ -373,17 +357,13 @@ def estadisticas_blastoise():
 
 def estadisticas_pidgeot():
     def selección_pidgeot():
-        global pokemon1, pokemon2, pokemon3
-        if pokemon1 is None:
-            pokemon1 = "Pidgeot"
-        elif pokemon1 is not None and pokemon2 is None:
-            pokemon2 = "Pidgeot"
-        elif pokemon1 is not None and pokemon2 is not None and pokemon3 is None:
-            pokemon3 = "Pidgeot"
-        else:
+        global pokemones_jugador
+        if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_pidgeot.destroy()
-        print("Pokemon seleccionado:", pokemon1, pokemon2, pokemon3)
+        else:
+            pokemones_jugador.append("Pidgeot")
+        print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_pidgeot = Toplevel()
     ventana_pidgeot.title("Estadísticas de Pidgeot")
     ventana_pidgeot.geometry("300x400")
@@ -398,17 +378,13 @@ def estadisticas_pidgeot():
 
 def estadisticas_rydhon():
     def selección_rydhon():
-        global pokemon1, pokemon2, pokemon3
-        if pokemon1 is None:
-            pokemon1 = "Rydhon"
-        elif pokemon1 is not None and pokemon2 is None:
-            pokemon2 = "Rydhon"
-        elif pokemon1 is not None and pokemon2 is not None and pokemon3 is None:
-            pokemon3 = "Rydhon"
-        else:
+        global pokemones_jugador
+        if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_rydhon.destroy()
-        print("Pokemon seleccionado:", pokemon1, pokemon2, pokemon3)
+        else:
+            pokemones_jugador.append("Rydhon")
+        print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_rydhon = Toplevel()
     ventana_rydhon.title("Estadísticas de Rydhon")
     ventana_rydhon.geometry("300x400")
@@ -423,17 +399,13 @@ def estadisticas_rydhon():
 
 def estadisticas_chansey():
     def selección_chansey():
-        global pokemon1, pokemon2, pokemon3
-        if pokemon1 is None:
-            pokemon1 = "Chansey"
-        elif pokemon1 is not None and pokemon2 is None:
-            pokemon2 = "Chansey"
-        elif pokemon1 is not None and pokemon2 is not None and pokemon3 is None:
-            pokemon3 = "Chansey"
-        else:
+        global pokemones_jugador
+        if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_chansey.destroy()
-        print("Pokemon seleccionado:", pokemon1, pokemon2, pokemon3)
+        else:
+            pokemones_jugador.append("Chansey")
+        print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_chansey = Toplevel()
     ventana_chansey.title("Estadísticas de Chansey")
     ventana_chansey.geometry("300x400")
@@ -448,17 +420,13 @@ def estadisticas_chansey():
 
 def estadisticas_snorlax():
     def selección_snorlax():
-        global pokemon1, pokemon2, pokemon3
-        if pokemon1 is None:
-            pokemon1 = "Snorlax"
-        elif pokemon1 is not None and pokemon2 is None:
-            pokemon2 = "Snorlax"
-        elif pokemon1 is not None and pokemon2 is not None and pokemon3 is None:
-            pokemon3 = "Snorlax"
-        else:
+        global pokemones_jugador
+        if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_snorlax.destroy()
-        print("Pokemon seleccionado:", pokemon1, pokemon2, pokemon3)
+        else:
+            pokemones_jugador.append("Snorlax")
+        print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_snorlax = Toplevel()
     ventana_snorlax.title("Estadísticas de Snorlax")
     ventana_snorlax.geometry("300x400")
@@ -473,17 +441,13 @@ def estadisticas_snorlax():
 
 def estadisticas_pikachu():
     def selección_pikachu():
-        global pokemon1, pokemon2, pokemon3
-        if pokemon1 is None:
-            pokemon1 = "Pikachu"
-        elif pokemon1 is not None and pokemon2 is None:
-            pokemon2 = "Pikachu"
-        elif pokemon1 is not None and pokemon2 is not None and pokemon3 is None:
-            pokemon3 = "Pikachu"
-        else:
+        global pokemones_jugador
+        if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_pikachu.destroy()
-        print("Pokemon seleccionado:", pokemon1, pokemon2, pokemon3)
+        else:
+            pokemones_jugador.append("Pikachu")
+        print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_pikachu = Toplevel()
     ventana_pikachu.title("Estadísticas de Pikachu")
     ventana_pikachu.geometry("300x400")
@@ -498,17 +462,13 @@ def estadisticas_pikachu():
 
 def estadisticas_nidoking():
     def selección_nidoking():
-        global pokemon1, pokemon2, pokemon3
-        if pokemon1 is None:
-            pokemon1 = "Nidoking"
-        elif pokemon1 is not None and pokemon2 is None:
-            pokemon2 = "Nidoking"
-        elif pokemon1 is not None and pokemon2 is not None and pokemon3 is None:
-            pokemon3 = "Nidoking"
-        else:
+        global pokemones_jugador
+        if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_nidoking.destroy()
-        print("Pokemon seleccionado:", pokemon1, pokemon2, pokemon3)
+        else:
+            pokemones_jugador.append("Nidoking")
+        print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_nidoking = Toplevel()
     ventana_nidoking.title("Estadísticas de Nidoking")
     ventana_nidoking.geometry("300x400")
@@ -523,17 +483,13 @@ def estadisticas_nidoking():
 
 def estadisticas_machamp():
     def selección_machamp():
-        global pokemon1, pokemon2, pokemon3
-        if pokemon1 is None:
-            pokemon1 = "Machamp"
-        elif pokemon1 is not None and pokemon2 is None:
-            pokemon2 = "Machamp"
-        elif pokemon1 is not None and pokemon2 is not None and pokemon3 is None:
-            pokemon3 = "Machamp"
-        else:
+        global pokemones_jugador
+        if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_machamp.destroy()
-        print("Pokemon seleccionado:", pokemon1, pokemon2, pokemon3)
+        else:
+            pokemones_jugador.append("Machamp")
+        print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_machamp = Toplevel()
     ventana_machamp.title("Estadísticas de Machamp")
     ventana_machamp.geometry("300x400")
@@ -545,7 +501,6 @@ def estadisticas_machamp():
     boton_cerrar.pack(pady=10)
     boton_seleccionar = Button(ventana_machamp, text="Seleccionar", command=lambda: (selección_machamp(), ventana_machamp.destroy()))
     boton_seleccionar.pack(pady=10)
-
 
 def ventana_puntajes(): #muestra la ventana de puntajes, por ahora solo es un placeholder sin funcionalidad real
     ventana_puntaje = Toplevel()
@@ -580,7 +535,7 @@ def nombre():
     boton_guardar.pack(pady=10)
 
 def ventana_batalla():
-    if pokemon1 is None or pokemon2 is None or pokemon3 is None or personaje_seleccionado is None or nombre_jugador is None:
+    if len(pokemones_jugador) < 3:
         ventana_error_batalla()
         return
     for w in canvas_menu.winfo_children():
@@ -617,11 +572,11 @@ def ventana_batalla():
         boton_continuar.destroy()
         label_seleccion = Label(canvas_menu, text="selecciona que pokemon quieres usar", font=('Arial', 12), bg='white')
         label_seleccion.place(x=10, y=400)
-        boton_pokemon1 = Button(canvas_menu, text=pokemon1, command=lambda: print("Seleccionaste", pokemon1))
+        boton_pokemon1 = Button(canvas_menu, text=pokemones_jugador[0], command=lambda: print("Seleccionaste", pokemones_jugador[0]))
         boton_pokemon1.place(x=10, y=430)
-        boton_pokemon2 = Button(canvas_menu, text=pokemon2, command=lambda: print("Seleccionaste", pokemon2))
+        boton_pokemon2 = Button(canvas_menu, text=pokemones_jugador[1], command=lambda: print("Seleccionaste", pokemones_jugador[1]))
         boton_pokemon2.place(x=10, y=460)
-        boton_pokemon3 = Button(canvas_menu, text=pokemon3, command=lambda: print("Seleccionaste", pokemon3))
+        boton_pokemon3 = Button(canvas_menu, text=pokemones_jugador[2], command=lambda: print("Seleccionaste", pokemones_jugador[2]))
         boton_pokemon3.place(x=10, y=490)
         
     boton_continuar = Button(canvas_menu, text="Continuar", command=continuar_batalla)
@@ -633,6 +588,9 @@ def ventana_error_batalla():
     ventana_error.geometry("300x200")
     label_error = Label(ventana_error, text="Debes seleccionar 3 pokemones, un personaje y un nombre antes de comenzar la batalla", font=('Arial', 12), wraplength=280)
     label_error.pack(pady=10)
+
+#def sistema_batalla():
+# daño = (50*)
 
 #función para reproducir música
 
