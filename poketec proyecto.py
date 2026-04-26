@@ -1,3 +1,4 @@
+img_pokemon = None
 about = """
 Instituto tecnológico de Costa Rica
 Ingeniería en Computadores
@@ -30,6 +31,8 @@ vent_personajes = "Elige tu personaje"
 personaje_seleccionado = None # variable global para guardar el personaje seleccionado
 global pokemones_jugador
 pokemones_jugador = []
+global pokemones_IA
+pokemones_IA = ["Slowbro","Nidoqueen","Rapidash","Dragonite","Articuno","Zapdos","Moltres","Mewtwo"]
 global nombre_jugador
 nombre_jugador = None # variable global para guardar el nombre del jugador
 
@@ -578,7 +581,31 @@ def ventana_batalla():
         boton_pokemon2.place(x=10, y=460)
         boton_pokemon3 = Button(canvas_menu, text=pokemones_jugador[2], command=lambda: print("Seleccionaste", pokemones_jugador[2]))
         boton_pokemon3.place(x=10, y=490)
-        
+    def batalla_continuar():
+        personaje_img.destroy()
+        if pokemones_jugador[0] == "Venasour":
+            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 003.png")
+        elif pokemones_jugador[0] == "Charizard":
+            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 006.png")
+        elif pokemones_jugador[0] == "Blastoise":
+            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 009.png")
+        elif pokemones_jugador[0] == "Pidgeot":
+            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 018.png")
+        elif pokemones_jugador[0] == "Rydhon":
+            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 025.png")
+        elif pokemones_jugador[0] == "Chansey":
+            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 113.png")
+        elif pokemones_jugador[0] == "Snorlax":
+            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 143.png")
+        elif pokemones_jugador[0] == "Pikachu":
+            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 025.png")
+        elif pokemones_jugador[0] == "Nidoking":
+            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 034.png")
+        elif pokemones_jugador[0] == "Machamp":
+            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 068.png")
+        pokemon_img = PhotoImage(file=pokemon_img)
+        canvas_menu.create_image(100, 300, anchor=NW, image=pokemon_img)
+        canvas_menu.pokemon = pokemon_img
     boton_continuar = Button(canvas_menu, text="Continuar", command=continuar_batalla)
     boton_continuar.place(x=10, y=500)
 
@@ -589,8 +616,9 @@ def ventana_error_batalla():
     label_error = Label(ventana_error, text="Debes seleccionar 3 pokemones, un personaje y un nombre antes de comenzar la batalla", font=('Arial', 12), wraplength=280)
     label_error.pack(pady=10)
 
-#def sistema_batalla():
-# daño = (50*)
+def sistema_batalla():
+    daño = (50*stats[pokemones_jugador[0]]["Attack"])/stats[pokemones_IA[0]]["Defense"]
+    
 
 #función para reproducir música
 
