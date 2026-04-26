@@ -566,8 +566,9 @@ def ventana_batalla():
     elif personaje_seleccionado == "Wally":
         personaje_img = asset_path(SPRITES_DIR, "RS_Wally_Back.png")
     personaje_img = PhotoImage(file=personaje_img)
-    canvas_menu.create_image(100, 300, anchor=NW, image=personaje_img)
+    personaje_canvas_id = canvas_menu.create_image(100, 300, anchor=NW, image=personaje_img)
     canvas_menu.personaje = personaje_img
+    canvas_menu.personaje_id = personaje_canvas_id 
     label_batalla = Label(canvas_menu, text="¡Prepárate para la batalla!", font=('Arial', 12), bg='white')
     label_batalla.place(x=10, y=10)
     def continuar_batalla():
@@ -575,37 +576,51 @@ def ventana_batalla():
         boton_continuar.destroy()
         label_seleccion = Label(canvas_menu, text="selecciona que pokemon quieres usar", font=('Arial', 12), bg='white')
         label_seleccion.place(x=10, y=400)
-        boton_pokemon1 = Button(canvas_menu, text=pokemones_jugador[0], command=lambda: print("Seleccionaste", pokemones_jugador[0]))
+        boton_pokemon1 = Button(canvas_menu, text=pokemones_jugador[0], command=lambda: (batalla_continuar(pokemones_jugador[0]), print("Seleccionaste", pokemones_jugador[0])))
         boton_pokemon1.place(x=10, y=430)
-        boton_pokemon2 = Button(canvas_menu, text=pokemones_jugador[1], command=lambda: print("Seleccionaste", pokemones_jugador[1]))
+        boton_pokemon2 = Button(canvas_menu, text=pokemones_jugador[1], command=lambda: (batalla_continuar(pokemones_jugador[1]), print("Seleccionaste", pokemones_jugador[1])))
         boton_pokemon2.place(x=10, y=460)
-        boton_pokemon3 = Button(canvas_menu, text=pokemones_jugador[2], command=lambda: print("Seleccionaste", pokemones_jugador[2]))
+        boton_pokemon3 = Button(canvas_menu, text=pokemones_jugador[2], command=lambda: (batalla_continuar(pokemones_jugador[2]), print("Seleccionaste", pokemones_jugador[2])))
         boton_pokemon3.place(x=10, y=490)
-    def batalla_continuar():
-        personaje_img.destroy()
-        if pokemones_jugador[0] == "Venasour":
-            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 003.png")
-        elif pokemones_jugador[0] == "Charizard":
-            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 006.png")
-        elif pokemones_jugador[0] == "Blastoise":
-            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 009.png")
-        elif pokemones_jugador[0] == "Pidgeot":
-            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 018.png")
-        elif pokemones_jugador[0] == "Rydhon":
-            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 025.png")
-        elif pokemones_jugador[0] == "Chansey":
-            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 113.png")
-        elif pokemones_jugador[0] == "Snorlax":
-            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 143.png")
-        elif pokemones_jugador[0] == "Pikachu":
-            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 025.png")
-        elif pokemones_jugador[0] == "Nidoking":
-            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 034.png")
-        elif pokemones_jugador[0] == "Machamp":
-            pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 068.png")
-        pokemon_img = PhotoImage(file=pokemon_img)
-        canvas_menu.create_image(100, 300, anchor=NW, image=pokemon_img)
-        canvas_menu.pokemon = pokemon_img
+        def batalla_continuar(pokemon_seleccionado):
+            canvas_menu.delete(canvas_menu.personaje_id)
+            boton_pokemon1.destroy()
+            boton_pokemon2.destroy()
+            boton_pokemon3.destroy()
+            label_seleccion.destroy()
+            if pokemon_seleccionado == "Venasour":
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 003.png")
+            elif pokemon_seleccionado == "Charizard":
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 006.png")
+            elif pokemon_seleccionado == "Blastoise":
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 009.png")
+            elif pokemon_seleccionado == "Pidgeot":
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 018.png")
+            elif pokemon_seleccionado == "Rhydon":
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 025.png")
+            elif pokemon_seleccionado == "Chansey":
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 113.png")
+            elif pokemon_seleccionado == "Snorlax":
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 143.png")
+            elif pokemon_seleccionado == "Pikachu":
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 025.png")
+            elif pokemon_seleccionado == "Nidoking":
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 034.png")
+            elif pokemon_seleccionado == "Machamp":
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 068.png")
+            else:
+                print("Error: pokemon no reconocido")
+            pokemon_img = PhotoImage(file=pokemon_img)
+            canvas_menu.create_image(100, 300, anchor=NW, image=pokemon_img)
+            canvas_menu.pokemon = pokemon_img
+            boton_continuar2 = Button(canvas_menu, text="Continuar", command=lambda: print("Continuar batalla"))
+            boton_continuar2.place(x=10, y=500)
+            def batalla_continuar2():
+                boton_continuar2.destroy()
+                canvas_menu.delete(canvas_menu.steven)
+                label_batalla.destroy()
+                label_seleccion.destroy()
+                label_
     boton_continuar = Button(canvas_menu, text="Continuar", command=continuar_batalla)
     boton_continuar.place(x=10, y=500)
 
