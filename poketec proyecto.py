@@ -7,24 +7,24 @@ Fabricio Guillén Acevedo 2026005221
 Profesor: Leornardo Araya
 """
 stats = {
-    "Venusaur": {"HP": 80, "Attack": 82, "Defense": 83},
-    "Charizard": {"HP": 78, "Attack": 84, "Defense": 78},
-    "Blastoise": {"HP": 79, "Attack": 83, "Defense": 100},
-    "Pidgeot": {"HP": 83, "Attack": 80, "Defense": 75},
-    "Rhydon": {"HP": 105, "Attack": 130, "Defense": 120},
-    "Chansey": {"HP": 250, "Attack": 5, "Defense": 5},
-    "Snorlax": {"HP": 160, "Attack": 110, "Defense": 65},
-    "Pikachu": {"HP": 35, "Attack": 55, "Defense": 40},
-    "Nidoking": {"HP": 81, "Attack": 102, "Defense": 77},
-    "Machamp": {"HP": 90, "Attack": 130, "Defense": 80},
-    "Mewtwo": {"HP": 106, "Attack": 150, "Defense": 90},
-    "Moltres": {"HP": 90, "Attack": 120, "Defense": 90},
-    "Rapidash": {"HP": 65, "Attack": 100, "Defense": 70},
-    "Articuno": {"HP": 90, "Attack": 85, "Defense": 100},
-    "Zapdos": {"HP": 90, "Attack": 100, "Defense": 85},
-    "Dragonite": {"HP": 91, "Attack": 134, "Defense": 95},
-    "Nidoqueen": {"HP": 90, "Attack": 92, "Defense": 87},
-    "Slowbro": {"HP": 95, "Attack": 75, "Defense": 110},
+    "Venusaur": {"HP": 80, "Attack": 82, "Defense": 83, "Defendiendo": False},
+    "Charizard": {"HP": 78, "Attack": 84, "Defense": 78, "Defendiendo": False},
+    "Blastoise": {"HP": 79, "Attack": 83, "Defense": 100, "Defendiendo": False},
+    "Pidgeot": {"HP": 83, "Attack": 80, "Defense": 75, "Defendiendo": False},
+    "Rhydon": {"HP": 105, "Attack": 130, "Defense": 120, "Defendiendo": False},
+    "Chansey": {"HP": 250, "Attack": 5, "Defense": 5, "Defendiendo": False},
+    "Snorlax": {"HP": 160, "Attack": 110, "Defense": 65, "Defendiendo": False},
+    "Pikachu": {"HP": 35, "Attack": 55, "Defense": 40, "Defendiendo": False},
+    "Nidoking": {"HP": 81, "Attack": 102, "Defense": 77, "Defendiendo": False},
+    "Machamp": {"HP": 90, "Attack": 130, "Defense": 80, "Defendiendo": False},
+    "Mewtwo": {"HP": 106, "Attack": 150, "Defense": 90, "Defendiendo": False},
+    "Moltres": {"HP": 90, "Attack": 120, "Defense": 90, "Defendiendo": False},
+    "Rapidash": {"HP": 65, "Attack": 100, "Defense": 70, "Defendiendo": False},
+    "Articuno": {"HP": 90, "Attack": 85, "Defense": 100, "Defendiendo": False},
+    "Zapdos": {"HP": 90, "Attack": 100, "Defense": 85, "Defendiendo": False},
+    "Dragonite": {"HP": 91, "Attack": 134, "Defense": 95, "Defendiendo": False},
+    "Nidoqueen": {"HP": 90, "Attack": 92, "Defense": 87, "Defendiendo": False},
+    "Slowbro": {"HP": 95, "Attack": 75, "Defense": 110, "Defendiendo": False},
 }
 Mejores_puntajes = []
 vent_personajes = "Elige tu personaje"
@@ -637,9 +637,21 @@ def ventana_error_batalla():
     label_error = Label(ventana_error, text="Debes seleccionar 3 pokemones, un personaje y un nombre antes de comenzar la batalla", font=('Arial', 12), wraplength=280)
     label_error.pack(pady=10)
 
-def sistema_batalla():
-    daño = (50*stats[pokemones_jugador[0]]["Attack"])/stats[pokemones_IA[0]]["Defense"]
-    
+def sistema_batalla(atacante, defensor):
+    daño = int(50*stats[atacante]["Attack"])/stats[defensor]["Defense"]
+    if stats[defensor]["Defendiendo"]:
+        daño = daño / 2
+        vida_defensor -= daño
+        stats[defensor]["Defendiendo"] = False
+    if vida_defensor <= 0:
+        vida_defensor = 0
+        print(defensor, "ha sido derrotado")
+    if stats[defensor]["HP"] <= 0:
+        print(defensor, "ha sido derrotado")
+
+def defender(pokemon):
+    stats[pokemon]["Defendiendo"] = True
+
 
 #función para reproducir música
 
