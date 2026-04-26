@@ -12,7 +12,7 @@ stats = {
     "Blastoise": {"HP": 79, "Attack": 83, "Defense": 100, "Defendiendo": False},
     "Pidgeot": {"HP": 83, "Attack": 80, "Defense": 75, "Defendiendo": False},
     "Rhydon": {"HP": 105, "Attack": 130, "Defense": 120, "Defendiendo": False},
-    "Chansey": {"HP": 250, "Attack": 5, "Defense": 5, "Defendiendo": False},
+    "Chansey": {"HP": 250, "Attack": 5, "Defense": 99999999, "Defendiendo": False},
     "Snorlax": {"HP": 160, "Attack": 110, "Defense": 65, "Defendiendo": False},
     "Pikachu": {"HP": 35, "Attack": 55, "Defense": 40, "Defendiendo": False},
     "Nidoking": {"HP": 81, "Attack": 102, "Defense": 77, "Defendiendo": False},
@@ -386,12 +386,12 @@ def estadisticas_rydhon():
             ventana_error_pokemon()
             ventana_rydhon.destroy()
         else:
-            pokemones_jugador.append("Rydhon")
+            pokemones_jugador.append("Rhydon")
         print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_rydhon = Toplevel()
-    ventana_rydhon.title("Estadísticas de Rydhon")
+    ventana_rydhon.title("Estadísticas de Rhydon")
     ventana_rydhon.geometry("300x400")
-    label_rydhon = Label(ventana_rydhon, text="Estadísticas de Rydhon", font=('Arial', 12))
+    label_rydhon = Label(ventana_rydhon, text="Estadísticas de Rhydon", font=('Arial', 12))
     label_rydhon.pack(pady=10)
     label_stats = Label(ventana_rydhon, text=f"HP: {stats['Rhydon']['HP']}\n Attack: {stats['Rhydon']['Attack']}\n Defense: {stats['Rhydon']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
@@ -598,7 +598,7 @@ def ventana_batalla():
             elif pokemon_seleccionado == "Pidgeot":
                 pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 018.png")
             elif pokemon_seleccionado == "Rhydon":
-                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 025.png")
+                pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 112.png")
             elif pokemon_seleccionado == "Chansey":
                 pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 113.png")
             elif pokemon_seleccionado == "Snorlax":
@@ -617,40 +617,89 @@ def ventana_batalla():
             boton_continuar2 = Button(canvas_menu, text="Continuar", command=lambda: (batalla_continuar2(), print("Continuar batalla")))
             boton_continuar2.place(x=10, y=500)
             def batalla_continuar2():
+                def sistema_batalla(atacante, defensor):
+                    daño = round(((50*stats[atacante]["Attack"]*2)/(stats[defensor]["Defense"])*random.randint(85, 100)/100),2)
+                    print(stats[defensor]["Defendiendo"])
+                    if stats[defensor]["Defendiendo"]:
+                        daño = daño / 2
+                        stats[defensor]["HP"] -= daño
+                        stats[defensor]["Defendiendo"] = False
+                    else:
+                        stats[defensor]["HP"] -= daño
+                    if stats[defensor]["HP"] <= 0:
+                        stats[defensor]["HP"] = 0
+                        print(defensor, "ha sido derrotado")
+                    if stats[defensor]["HP"] <= 0:
+                        print(defensor, "ha sido derrotado")
+                    print(atacante, "ataca a", defensor, "y le hace", daño, "de daño. HP restante de", defensor, ":", stats[defensor]["HP"])
+                    actualizar_vida()
+                def actualizar_vida():
+                    label_vida_usuario.config(text=f"Tu {pokemon_seleccionado} HP: {stats[pokemon_seleccionado]['HP']}")
+                    label_vida_steven.config(text=f"Steven {pokemones_IA[0]} HP: {stats[pokemones_IA[0]]['HP']}")
+                def turno_usuario():
+                    num = random.randint(0,1)
+                    if num < 0.5:
+                        ia_defender = False
+                        print("Steven decide atacar")
+                    else:
+                        ia_defender = True
+                        print("Steven decide defender")
+                        defender(pokemones_IA[0])
+                        
+                    sistema_batalla(pokemon_seleccionado, pokemones_IA[0])
+                    print("Atacaste con", pokemon_seleccionado)
+                    if not ia_defender:
+                        sistema_batalla(pokemones_IA[0], pokemon_seleccionado)
+                    stats[pokemones_IA[0]]["Defendiendo"] = False
+                    stats[pokemon_seleccionado]["Defendiendo"] = False
+                    actualizar_vida()
+                def defensa_usuario():
+                    defender(pokemon_seleccionado)
+                    print("Defendiste con", pokemon_seleccionado)
+                    sistema_batalla(pokemones_IA[0], pokemon_seleccionado)
+                    stats[pokemon_seleccionado]["Defendiendo"] = False
+                    stats[pokemones_IA[0]]["Defendiendo"] = False
+                    actualizar_vida()
+                def defender(pokemon):
+                    stats[pokemon]["Defendiendo"] = True
                 boton_continuar2.destroy()
                 canvas_menu.delete(canvas_menu.Steven_id)
                 label_batalla.destroy()
                 label_seleccion.destroy()
-                label_prebatalla = Label(canvas_menu, text="Steven saca a Slowbro", font=('Arial', 12), bg='white')
-                label_prebatalla.place(x=10, y=10)
-                pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_080.png")
+                pokemonia_img = pokemones_IA[0]
+                if pokemonia_img == "Slowbro":
+                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_080.png")
+                elif pokemonia_img == "Nidoqueen":
+                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_031.png")
+                elif pokemonia_img == "Rapidash":
+                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_078.png")
+                elif pokemonia_img == "Dragonite":
+                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_149.png")
+                elif pokemonia_img == "Articuno":
+                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_144.png")
+                elif pokemonia_img == "Zapdos":
+                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_145.png")
+                elif pokemonia_img == "Moltres":
+                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_146.png")
+                else:
+                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_150.png")
                 pokemonia_img = PhotoImage(file=pokemonia_img)
                 canvas_menu.create_image(400, 100, anchor=NW, image=pokemonia_img)
                 canvas_menu.pokemonia = pokemonia_img
+                label_prebatalla = Label(canvas_menu, text=f"Steven saca a {pokemones_IA[0]}", font=('Arial', 12), bg='white')
+                label_prebatalla.place(x=10, y=10)
+                label_vida_usuario = Label(canvas_menu, text=f"Tu {pokemon_seleccionado} HP: {stats[pokemon_seleccionado]['HP']}", font=('Arial', 12), bg='white')
+                label_vida_usuario.place(x=10, y=50)
+                label_vida_steven = Label(canvas_menu, text=f"Steven {pokemones_IA[0]} HP: {stats[pokemones_IA[0]]['HP']}", font=('Arial', 12), bg='white')
+                label_vida_steven.place(x=10, y=80)
+                boton_atacar = Button(canvas_menu, text="Atacar", command=lambda: (turno_usuario(), print("Atacaste con", pokemon_seleccionado)))
+                boton_atacar.place(x=10, y=110)
+                boton_defender = Button(canvas_menu, text="Defender", command=lambda: (defensa_usuario(), print("Defendiste con", pokemon_seleccionado)))
+                boton_defender.place(x=80, y=110)
     boton_continuar = Button(canvas_menu, text="Continuar", command=continuar_batalla)
     boton_continuar.place(x=10, y=500)
 
-def ventana_error_batalla():
-    ventana_error = Toplevel()
-    ventana_error.title("Error")
-    ventana_error.geometry("300x200")
-    label_error = Label(ventana_error, text="Debes seleccionar 3 pokemones, un personaje y un nombre antes de comenzar la batalla", font=('Arial', 12), wraplength=280)
-    label_error.pack(pady=10)
 
-def sistema_batalla(atacante, defensor):
-    daño = int(50*stats[atacante]["Attack"])/stats[defensor]["Defense"]
-    if stats[defensor]["Defendiendo"]:
-        daño = daño / 2
-        vida_defensor -= daño
-        stats[defensor]["Defendiendo"] = False
-    if vida_defensor <= 0:
-        vida_defensor = 0
-        print(defensor, "ha sido derrotado")
-    if stats[defensor]["HP"] <= 0:
-        print(defensor, "ha sido derrotado")
-
-def defender(pokemon):
-    stats[pokemon]["Defendiendo"] = True
 
 
 #función para reproducir música
@@ -701,6 +750,13 @@ def setup_music(window, filename=MUSIC_FILENAME): #Investigar el funcionamiento 
         window.protocol('WM_DELETE_WINDOW', on_close)
     except Exception as e:
         print('Error iniciando winsound:', e)
+
+def ventana_error_batalla():
+    ventana_error = Toplevel()
+    ventana_error.title("Error")
+    ventana_error.geometry("300x200")
+    label_error = Label(ventana_error, text="Debes seleccionar 3 pokemones, un personaje y un nombre antes de comenzar la batalla", font=('Arial', 12), wraplength=280)
+    label_error.pack(pady=10)
 
 ventana = Tk()
 ventana.title("Poketec")
