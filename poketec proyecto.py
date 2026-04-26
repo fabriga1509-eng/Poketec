@@ -553,8 +553,9 @@ def ventana_batalla():
     canvas_menu.fondo_batalla = fondo_batalla_img
     steven = asset_path(SPRITES_DIR, "Spr_RS_Steven.png")
     steven_img = PhotoImage(file=steven)
-    canvas_menu.create_image(400, 100, anchor=NW, image=steven_img)
+    steven_canvas_id = canvas_menu.create_image(400, 100, anchor=NW, image=steven_img)
     canvas_menu.steven = steven_img
+    canvas_menu.Steven_id = steven_canvas_id 
     if personaje_seleccionado == "Red":
         personaje_img = asset_path(SPRITES_DIR, "E_Red_Back.png")
     elif personaje_seleccionado == "Leaf":
@@ -613,14 +614,19 @@ def ventana_batalla():
             pokemon_img = PhotoImage(file=pokemon_img)
             canvas_menu.create_image(100, 300, anchor=NW, image=pokemon_img)
             canvas_menu.pokemon = pokemon_img
-            boton_continuar2 = Button(canvas_menu, text="Continuar", command=lambda: print("Continuar batalla"))
+            boton_continuar2 = Button(canvas_menu, text="Continuar", command=lambda: (batalla_continuar2(), print("Continuar batalla")))
             boton_continuar2.place(x=10, y=500)
             def batalla_continuar2():
                 boton_continuar2.destroy()
-                canvas_menu.delete(canvas_menu.steven)
+                canvas_menu.delete(canvas_menu.Steven_id)
                 label_batalla.destroy()
                 label_seleccion.destroy()
-                label_
+                label_prebatalla = Label(canvas_menu, text="Steven saca a Slowbro", font=('Arial', 12), bg='white')
+                label_prebatalla.place(x=10, y=10)
+                pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_080.png")
+                pokemonia_img = PhotoImage(file=pokemonia_img)
+                canvas_menu.create_image(400, 100, anchor=NW, image=pokemonia_img)
+                canvas_menu.pokemonia = pokemonia_img
     boton_continuar = Button(canvas_menu, text="Continuar", command=continuar_batalla)
     boton_continuar.place(x=10, y=500)
 
