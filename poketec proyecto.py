@@ -12,7 +12,7 @@ stats = {
     "Blastoise": {"HP": 79, "Attack": 83, "Defense": 100, "Defendiendo": False},
     "Pidgeot": {"HP": 83, "Attack": 80, "Defense": 75, "Defendiendo": False},
     "Rhydon": {"HP": 105, "Attack": 130, "Defense": 120, "Defendiendo": False},
-    "Chansey": {"HP": 250, "Attack": 99999999995, "Defense": 99999999, "Defendiendo": False},
+    "Chansey": {"HP": 250, "Attack": 5000000, "Defense": 99, "Defendiendo": False},
     "Snorlax": {"HP": 160, "Attack": 110, "Defense": 65, "Defendiendo": False},
     "Pikachu": {"HP": 35, "Attack": 55, "Defense": 40, "Defendiendo": False},
     "Nidoking": {"HP": 81, "Attack": 102, "Defense": 77, "Defendiendo": False},
@@ -24,7 +24,7 @@ stats = {
     "Zapdos": {"HP": 90, "Attack": 100, "Defense": 85, "Defendiendo": False},
     "Dragonite": {"HP": 91, "Attack": 130, "Defense": 95, "Defendiendo": False},
     "Nidoqueen": {"HP": 90, "Attack": 87, "Defense": 87, "Defendiendo": False},
-    "Slowbro": {"HP": 95, "Attack": 70000, "Defense": 110, "Defendiendo": False},
+    "Slowbro": {"HP": 95, "Attack": 70, "Defense": 110, "Defendiendo": False},
 }
 sprites = {
     "Venusaur": "Spr b g1 003.png",
@@ -55,6 +55,7 @@ global pokemones_IA
 pokemones_IA = ["Slowbro","Nidoqueen","Rapidash","Dragonite","Articuno","Zapdos","Moltres","Mewtwo"]
 global nombre_jugador
 nombre_jugador = None # variable global para guardar el nombre del jugador
+pokemon_activo = None
 
 from tkinter import *
 from os import path #para los archivos de audio e imágenes
@@ -100,8 +101,6 @@ def musica_batalla(filename):
         print("Error cambiando música con winsound:", e)
 #fondo
 def menu (nombre, max_size = (558,552)):
-    # intentar varias ubicaciones: la carpeta backgrounds que creaste, luego la raiz del proyecto y
-    # como última opción la estructura assets/backgrounds (si existe)
     candidates = [
         asset_path(BACKGROUNDS_DIR, nombre),
         path.join(BASE_DIR, nombre),
@@ -604,6 +603,8 @@ def ventana_batalla():
         boton_pokemon3 = Button(canvas_menu, text=pokemones_jugador[2], command=lambda: (batalla_continuar(pokemones_jugador[2]), print("Seleccionaste", pokemones_jugador[2])))
         boton_pokemon3.place(x=10, y=490)
         def batalla_continuar(pokemon_seleccionado):
+            global pokemon_activo
+            pokemon_activo = pokemon_seleccionado
             canvas_menu.delete(canvas_menu.personaje_id)
             boton_pokemon1.destroy()
             boton_pokemon2.destroy()
@@ -641,7 +642,7 @@ def ventana_batalla():
                     print(atacante, "ataca a", defensor, "y le hace", daño, "de daño. HP restante de", defensor, ":", stats[defensor]["HP"])
                     actualizar_vida()
                 def actualizar_vida():
-                    label_vida_usuario.config(text=f"Tu {pokemon_seleccionado} HP: {stats[pokemon_seleccionado]['HP']}")
+                    label_vida_usuario.config(text=f"Tu {pokemon_activo} HP: {stats[pokemon_activo]['HP']}")
                     label_vida_steven.config(text=f"Steven {pokemones_IA[0]} HP: {stats[pokemones_IA[0]]['HP']}")
                 def turno_usuario():
                     num = random.randint(0,1)
@@ -652,20 +653,21 @@ def ventana_batalla():
                         ia_defender = True
                         print("Steven decide defender")
                         defender(pokemones_IA[0])
-                        
-                    sistema_batalla(pokemon_seleccionado, pokemones_IA[0])
-                    print("Atacaste con", pokemon_seleccionado)
+                    sistema_batalla(pokemon_activo, pokemones_IA[0])
+                    print("Atacaste con", pokemon_activo)
                     if not ia_defender and stats[pokemones_IA[0]]["HP"] > 0:
-                        sistema_batalla(pokemones_IA[0], pokemon_seleccionado)
+                        sistema_batalla(pokemones_IA[0], pokemon_activo)
                     stats[pokemones_IA[0]]["Defendiendo"] = False
-                    stats[pokemon_seleccionado]["Defendiendo"] = False
+                    stats[pokemon_activo]["Defendiendo"] = False
+                    canvas_menu.after(500)
                     actualizar_vida()
                 def defensa_usuario():
-                    defender(pokemon_seleccionado)
-                    print("Defendiste con", pokemon_seleccionado)
-                    sistema_batalla(pokemones_IA[0], pokemon_seleccionado)
-                    stats[pokemon_seleccionado]["Defendiendo"] = False
+                    defender(pokemon_activo)
+                    print("Defendiste con", pokemon_activo)
+                    sistema_batalla(pokemones_IA[0], pokemon_activo)
+                    stats[pokemon_activo]["Defendiendo"] = False
                     stats[pokemones_IA[0]]["Defendiendo"] = False
+                    canvas_menu.after(500)
                     actualizar_vida()
                 def defender(pokemon):
                     stats[pokemon]["Defendiendo"] = True
@@ -675,6 +677,7 @@ def ventana_batalla():
                         print(pokemones_jugador)
                         ko_usuario()
                     else:
+                        canvas_menu.after(1000)
                         label_ko = Label(canvas_menu, text=f"{defensor} ha sido derrotado\n¿Quieres agregar a {defensor} a tu equipo?", font=('Arial', 12), bg='white')
                         label_ko.place(x=10, y=150)
                         def agregar_pokemon():
@@ -688,6 +691,7 @@ def ventana_batalla():
                             boton_no_agregar.destroy()
                             canvas_menu.delete(canvas_menu.pokemonia_id)
                             canvas_menu.pokemonia = None
+                            canvas_menu.after(500)
                             pokemon_ia()
                             actualizar_vida()
                         def no_agregar():
@@ -698,8 +702,10 @@ def ventana_batalla():
                             boton_no_agregar.destroy()
                             canvas_menu.delete(canvas_menu.pokemonia_id)  # ✅ usa el ID
                             canvas_menu.pokemonia = None 
+                            canvas_menu.after(500)
                             pokemon_ia()
                             actualizar_vida()
+                        canvas_menu.after(500)
                         boton_agregar = Button(canvas_menu, text="Si", command=agregar_pokemon)
                         boton_agregar.place(x=10, y=180)
                         boton_no_agregar = Button(canvas_menu, text="No", command=no_agregar)
@@ -708,17 +714,32 @@ def ventana_batalla():
                     label_ko_usuario = Label(canvas_menu, text="Tu Pokémon ha sido derrotado\nElige otro Pokémon", font=('Arial', 12), bg='white')
                     label_ko_usuario.place(x=10, y=150)
                     botones_pokemon = []
+                    canvas_menu.after(500)
                     for i,pokemon in enumerate(pokemones_jugador):
-                        boton = Button(canvas_menu, text=pokemon, command=lambda p=pokemon: (destroy_botones_pokemon(botones_pokemon),label_ko_usuario.destroy(),cargar_sprite_pokemon(p), actualizar_vida()))
+                        boton = Button(canvas_menu, text=pokemon, command=lambda p=pokemon: (cambiar_pokemon(p, botones_pokemon, label_ko_usuario), print("Cambiaste a", p)))
                         boton.place(x=10, y=180 + i*30)
                         botones_pokemon.append(boton)
                     return botones_pokemon
+                def cambiar_pokemon(p, botones, label_ko_usuario):
+                    global pokemon_activo
+                    pokemon_activo = p  # ← actualiza el pokémon activo
+                    destroy_botones_pokemon(botones)
+                    label_ko_usuario.destroy()
+                    canvas_menu.after(500)
+                    cargar_sprite_pokemon(p)
+                    actualizar_vida()
                 def destroy_botones_pokemon(botones):
+                    canvas_menu.after(500)
                     canvas_menu.delete(canvas_menu.pokemonid)
                     for b in botones:
                         b.destroy()
                     actualizar_vida()
                 #Interfaz de batalla
+                def mostrar_botones():
+                    boton_atacar = Button(canvas_menu, text="Atacar", command=lambda: (turno_usuario(), print("Atacaste con", pokemon_seleccionado)))
+                    boton_atacar.place(x=10, y=110)
+                    boton_defender = Button(canvas_menu, text="Defender", command=lambda: (defensa_usuario(), print("Defendiste con", pokemon_seleccionado)))
+                    boton_defender.place(x=80, y=110)
                 def pokemon_ia():
                     pokemonia_img = pokemones_IA[0]
                     if pokemonia_img == "Slowbro":
@@ -735,8 +756,10 @@ def ventana_batalla():
                         pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_145.png")
                     elif pokemonia_img == "Moltres":
                         pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_146.png")
-                    else:
+                    elif pokemonia_img == "Mewtwo":
                         pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_150.png")
+                    else:
+                        print("Has derrotado a todos los pokemones de Steven, ¡Felicidades!")
                     pokemonia_img = PhotoImage(file=pokemonia_img)
                     pokemon_canvas_id = canvas_menu.create_image(400, 100, anchor=NW, image=pokemonia_img)
                     canvas_menu.pokemonia = pokemonia_img
@@ -752,10 +775,7 @@ def ventana_batalla():
                 label_vida_usuario.place(x=10, y=50)
                 label_vida_steven = Label(canvas_menu, text=f"Steven {pokemones_IA[0]} HP: {stats[pokemones_IA[0]]['HP']}", font=('Arial', 12), bg='white')
                 label_vida_steven.place(x=10, y=80)
-                boton_atacar = Button(canvas_menu, text="Atacar", command=lambda: (turno_usuario(), print("Atacaste con", pokemon_seleccionado)))
-                boton_atacar.place(x=10, y=110)
-                boton_defender = Button(canvas_menu, text="Defender", command=lambda: (defensa_usuario(), print("Defendiste con", pokemon_seleccionado)))
-                boton_defender.place(x=80, y=110)
+                canvas_menu.after(1000, mostrar_botones)  # espera 2 segundos antes de mostrar los botones de acción
     boton_continuar = Button(canvas_menu, text="Continuar", command=continuar_batalla)
     boton_continuar.place(x=10, y=500)
 
