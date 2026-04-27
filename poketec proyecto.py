@@ -12,7 +12,7 @@ stats = {
     "Blastoise": {"HP": 79, "Attack": 83, "Defense": 100, "Defendiendo": False},
     "Pidgeot": {"HP": 83, "Attack": 80, "Defense": 75, "Defendiendo": False},
     "Rhydon": {"HP": 105, "Attack": 130, "Defense": 120, "Defendiendo": False},
-    "Chansey": {"HP": 250, "Attack": 5, "Defense": 99999999, "Defendiendo": False},
+    "Chansey": {"HP": 250, "Attack": 99999999995, "Defense": 99999999, "Defendiendo": False},
     "Snorlax": {"HP": 160, "Attack": 110, "Defense": 65, "Defendiendo": False},
     "Pikachu": {"HP": 35, "Attack": 55, "Defense": 40, "Defendiendo": False},
     "Nidoking": {"HP": 81, "Attack": 102, "Defense": 77, "Defendiendo": False},
@@ -617,6 +617,7 @@ def ventana_batalla():
             boton_continuar2 = Button(canvas_menu, text="Continuar", command=lambda: (batalla_continuar2(), print("Continuar batalla")))
             boton_continuar2.place(x=10, y=500)
             def batalla_continuar2():
+                #Sistema de batalla
                 def sistema_batalla(atacante, defensor):
                     daño = round(((50*stats[atacante]["Attack"]*2)/(stats[defensor]["Defense"])*random.randint(85, 100)/100),2)
                     print(stats[defensor]["Defendiendo"])
@@ -629,6 +630,7 @@ def ventana_batalla():
                     if stats[defensor]["HP"] <= 0:
                         stats[defensor]["HP"] = 0
                         print(defensor, "ha sido derrotado")
+                        KO(defensor)
                     if stats[defensor]["HP"] <= 0:
                         print(defensor, "ha sido derrotado")
                     print(atacante, "ataca a", defensor, "y le hace", daño, "de daño. HP restante de", defensor, ":", stats[defensor]["HP"])
@@ -648,7 +650,7 @@ def ventana_batalla():
                         
                     sistema_batalla(pokemon_seleccionado, pokemones_IA[0])
                     print("Atacaste con", pokemon_seleccionado)
-                    if not ia_defender:
+                    if not ia_defender and stats[pokemones_IA[0]]["HP"] > 0:
                         sistema_batalla(pokemones_IA[0], pokemon_seleccionado)
                     stats[pokemones_IA[0]]["Defendiendo"] = False
                     stats[pokemon_seleccionado]["Defendiendo"] = False
@@ -662,30 +664,64 @@ def ventana_batalla():
                     actualizar_vida()
                 def defender(pokemon):
                     stats[pokemon]["Defendiendo"] = True
+                def KO(defensor):
+                    label_ko = Label(canvas_menu, text=f"{defensor} ha sido derrotado\n¿Quieres agregar a {defensor} a tu equipo?", font=('Arial', 12), bg='white')
+                    label_ko.place(x=10, y=150)
+                    def agregar_pokemon():
+                        pokemones_jugador.append(defensor)
+                        print(pokemones_jugador)
+                        pokemones_IA.pop(0)
+                        print(pokemones_IA)
+                        stats[defensor]["HP"] = 100
+                        label_ko.destroy()
+                        boton_agregar.destroy()
+                        boton_no_agregar.destroy()
+                        canvas_menu.delete(canvas_menu.pokemonia_id)
+                        canvas_menu.pokemonia = None
+                        pokemon_ia()
+                        actualizar_vida()
+                    def no_agregar():
+                        pokemones_IA.pop(0)
+                        print(pokemones_IA)
+                        label_ko.destroy()
+                        boton_agregar.destroy()
+                        boton_no_agregar.destroy()
+                        canvas_menu.delete(canvas_menu.pokemonia_id)  # ✅ usa el ID
+                        canvas_menu.pokemonia = None 
+                        pokemon_ia()
+                        actualizar_vida()
+                    boton_agregar = Button(canvas_menu, text="Si", command=agregar_pokemon)
+                    boton_agregar.place(x=10, y=180)
+                    boton_no_agregar = Button(canvas_menu, text="No", command=no_agregar)
+                    boton_no_agregar.place(x=60, y=180)
+                #Interfaz de batalla
+                def pokemon_ia():
+                    pokemonia_img = pokemones_IA[0]
+                    if pokemonia_img == "Slowbro":
+                        pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_080.png")
+                    elif pokemonia_img == "Nidoqueen":
+                        pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_031.png")
+                    elif pokemonia_img == "Rapidash":
+                        pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_078.png")
+                    elif pokemonia_img == "Dragonite":
+                        pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_149.png")
+                    elif pokemonia_img == "Articuno":
+                        pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_144.png")
+                    elif pokemonia_img == "Zapdos":
+                        pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_145.png")
+                    elif pokemonia_img == "Moltres":
+                        pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_146.png")
+                    else:
+                        pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_150.png")
+                    pokemonia_img = PhotoImage(file=pokemonia_img)
+                    pokemon_canvas_id = canvas_menu.create_image(400, 100, anchor=NW, image=pokemonia_img)
+                    canvas_menu.pokemonia = pokemonia_img
+                    canvas_menu.pokemonia_id = pokemon_canvas_id
                 boton_continuar2.destroy()
                 canvas_menu.delete(canvas_menu.Steven_id)
                 label_batalla.destroy()
                 label_seleccion.destroy()
-                pokemonia_img = pokemones_IA[0]
-                if pokemonia_img == "Slowbro":
-                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_080.png")
-                elif pokemonia_img == "Nidoqueen":
-                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_031.png")
-                elif pokemonia_img == "Rapidash":
-                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_078.png")
-                elif pokemonia_img == "Dragonite":
-                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_149.png")
-                elif pokemonia_img == "Articuno":
-                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_144.png")
-                elif pokemonia_img == "Zapdos":
-                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_145.png")
-                elif pokemonia_img == "Moltres":
-                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_146.png")
-                else:
-                    pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_150.png")
-                pokemonia_img = PhotoImage(file=pokemonia_img)
-                canvas_menu.create_image(400, 100, anchor=NW, image=pokemonia_img)
-                canvas_menu.pokemonia = pokemonia_img
+                pokemon_ia()
                 label_prebatalla = Label(canvas_menu, text=f"Steven saca a {pokemones_IA[0]}", font=('Arial', 12), bg='white')
                 label_prebatalla.place(x=10, y=10)
                 label_vida_usuario = Label(canvas_menu, text=f"Tu {pokemon_seleccionado} HP: {stats[pokemon_seleccionado]['HP']}", font=('Arial', 12), bg='white')
