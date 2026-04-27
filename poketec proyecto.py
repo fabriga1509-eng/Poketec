@@ -12,7 +12,7 @@ stats = {
     "Blastoise": {"HP": 79, "Attack": 83, "Defense": 100, "Defendiendo": False},
     "Pidgeot": {"HP": 83, "Attack": 80, "Defense": 75, "Defendiendo": False},
     "Rhydon": {"HP": 105, "Attack": 130, "Defense": 120, "Defendiendo": False},
-    "Chansey": {"HP": 250, "Attack": 5000000, "Defense": 99, "Defendiendo": False},
+    "Chansey": {"HP": 250, "Attack": 5000000, "Defense": 99999999, "Defendiendo": False},
     "Snorlax": {"HP": 160, "Attack": 110, "Defense": 65, "Defendiendo": False},
     "Pikachu": {"HP": 35, "Attack": 55, "Defense": 40, "Defendiendo": False},
     "Nidoking": {"HP": 81, "Attack": 102, "Defense": 77, "Defendiendo": False},
@@ -56,6 +56,7 @@ pokemones_IA = ["Slowbro","Nidoqueen","Rapidash","Dragonite","Articuno","Zapdos"
 global nombre_jugador
 nombre_jugador = None # variable global para guardar el nombre del jugador
 pokemon_activo = None
+turno_limite = 5
 
 from tkinter import *
 from os import path #para los archivos de audio e imágenes
@@ -623,6 +624,7 @@ def ventana_batalla():
             boton_continuar2 = Button(canvas_menu, text="Continuar", command=lambda: (batalla_continuar2(), print("Continuar batalla")))
             boton_continuar2.place(x=10, y=500)
             def batalla_continuar2():
+                canvas_menu.turno_actual = 0
                 #Sistema de batalla
                 def sistema_batalla(atacante, defensor):
                     daño = round(((50*stats[atacante]["Attack"]*2)/(stats[defensor]["Defense"])*random.randint(85, 100)/100),2)
@@ -645,6 +647,9 @@ def ventana_batalla():
                     label_vida_usuario.config(text=f"Tu {pokemon_activo} HP: {stats[pokemon_activo]['HP']}")
                     label_vida_steven.config(text=f"Steven {pokemones_IA[0]} HP: {stats[pokemones_IA[0]]['HP']}")
                 def turno_usuario():
+                    canvas_menu.turno_actual += 1
+                    print(canvas_menu.turno_actual)
+                    global turno_limite
                     num = random.randint(0,1)
                     if num < 0.5:
                         ia_defender = False
@@ -659,9 +664,18 @@ def ventana_batalla():
                         sistema_batalla(pokemones_IA[0], pokemon_activo)
                     stats[pokemones_IA[0]]["Defendiendo"] = False
                     stats[pokemon_activo]["Defendiendo"] = False
-                    canvas_menu.after(500)
+                    if canvas_menu.turno_actual >= turno_limite:
+                        canvas_menu.turno_actual = 0
+                        canvas_menu.after(500, cambio_forzado)
+                        return
                     actualizar_vida()
                 def defensa_usuario():
+                    canvas_menu.turno_actual += 1
+                    print(canvas_menu.turno_actual)
+                    if canvas_menu.turno_actual >= turno_limite:
+                        canvas_menu.turno_actual = 0
+                        canvas_menu.after(500, cambio_forzado)
+                        return
                     defender(pokemon_activo)
                     print("Defendiste con", pokemon_activo)
                     sistema_batalla(pokemones_IA[0], pokemon_activo)
@@ -673,6 +687,7 @@ def ventana_batalla():
                     stats[pokemon]["Defendiendo"] = True
                 def KO(defensor):
                     if defensor in pokemones_jugador:
+                        canvas_menu.turno_actual = 0
                         pokemones_jugador.remove(defensor)
                         print(pokemones_jugador)
                         ko_usuario()
@@ -680,6 +695,7 @@ def ventana_batalla():
                         canvas_menu.after(1000)
                         label_ko = Label(canvas_menu, text=f"{defensor} ha sido derrotado\n¿Quieres agregar a {defensor} a tu equipo?", font=('Arial', 12), bg='white')
                         label_ko.place(x=10, y=150)
+                        canvas_menu.turno_actual = 0
                         def agregar_pokemon():
                             pokemones_jugador.append(defensor)
                             print(pokemones_jugador)
@@ -734,6 +750,33 @@ def ventana_batalla():
                     for b in botones:
                         b.destroy()
                     actualizar_vida()
+                def cambio_forzado():
+                    label_cambio = Label(canvas_menu, text="¡TIEMPO DE CAMBIO! Elige otro Pokémon", font=('Arial', 12), bg='white')
+                    label_cambio.place(x=10, y=150)
+                    if len(pokemones_IA) > 1:
+                        pokemones_IA.append(pokemones_IA.pop(0))  # mueve el primer Pokémon al final de la lista
+                    canvas_menu.after(500, lambda: (label_cambio.destroy(), elegir_pokemon_cambio()))
+                def elegir_pokemon_cambio():
+                    label_elegir = Label(canvas_menu, text="Elige tu nuevo Pokémon", font=('Arial', 12), bg='white')
+                    label_elegir.place(x=10, y=180)
+                    botones = []
+                    canvas_menu.after(500)
+                    for i,pokemon in enumerate(pokemones_jugador):
+                        boton = Button(canvas_menu, text=pokemon, command=lambda p=pokemon: (confirmar_cambio(p,botones, label_elegir), print("Cambiaste a", p)))
+                        boton.place(x=10, y=180 + i*30)
+                        botones.append(boton)
+                def confirmar_cambio(nuevo_pokemon, botones, label_elegir):
+                    global pokemon_activo
+                    pokemon_activo = nuevo_pokemon
+                    for b in botones:
+                        b.destroy()
+                    label_elegir.destroy()
+                    canvas_menu.delete(canvas_menu.pokemonid)
+                    canvas_menu.delete(canvas_menu.pokemonia_id)
+                    cargar_sprite_pokemon(nuevo_pokemon)
+                    pokemon_ia()
+                    actualizar_vida()
+                #_________________________________
                 #Interfaz de batalla
                 def mostrar_botones():
                     boton_atacar = Button(canvas_menu, text="Atacar", command=lambda: (turno_usuario(), print("Atacaste con", pokemon_seleccionado)))
