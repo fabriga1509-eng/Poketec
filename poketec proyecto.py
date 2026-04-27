@@ -18,13 +18,13 @@ stats = {
     "Nidoking": {"HP": 81, "Attack": 102, "Defense": 77, "Defendiendo": False},
     "Machamp": {"HP": 90, "Attack": 130, "Defense": 80, "Defendiendo": False},
     "Mewtwo": {"HP": 106, "Attack": 150, "Defense": 90, "Defendiendo": False},
-    "Moltres": {"HP": 90, "Attack": 120, "Defense": 90, "Defendiendo": False},
+    "Moltres": {"HP": 90, "Attack": 110, "Defense": 90, "Defendiendo": False},
     "Rapidash": {"HP": 65, "Attack": 100, "Defense": 70, "Defendiendo": False},
     "Articuno": {"HP": 90, "Attack": 85, "Defense": 100, "Defendiendo": False},
     "Zapdos": {"HP": 90, "Attack": 100, "Defense": 85, "Defendiendo": False},
-    "Dragonite": {"HP": 91, "Attack": 134, "Defense": 95, "Defendiendo": False},
-    "Nidoqueen": {"HP": 90, "Attack": 92, "Defense": 87, "Defendiendo": False},
-    "Slowbro": {"HP": 95, "Attack": 75, "Defense": 110, "Defendiendo": False},
+    "Dragonite": {"HP": 91, "Attack": 130, "Defense": 95, "Defendiendo": False},
+    "Nidoqueen": {"HP": 90, "Attack": 87, "Defense": 87, "Defendiendo": False},
+    "Slowbro": {"HP": 95, "Attack": 70, "Defense": 110, "Defendiendo": False},
 }
 Mejores_puntajes = []
 vent_personajes = "Elige tu personaje"
@@ -302,7 +302,7 @@ def estadisticas_venasour():
             ventana_error_pokemon()
             ventana_venasour.destroy()
         else:
-            pokemones_jugador.append("Venasour")
+            pokemones_jugador.append("Venusaur")
         print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_venasour = Toplevel()
     ventana_venasour.title("Estadísticas de Venusaur")
@@ -589,7 +589,7 @@ def ventana_batalla():
             boton_pokemon2.destroy()
             boton_pokemon3.destroy()
             label_seleccion.destroy()
-            if pokemon_seleccionado == "Venasour":
+            if pokemon_seleccionado == "Venusaur":
                 pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 003.png")
             elif pokemon_seleccionado == "Charizard":
                 pokemon_img = asset_path(SPRITES_DIR, "Spr b g1 006.png")
