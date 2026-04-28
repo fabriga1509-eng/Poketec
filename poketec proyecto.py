@@ -334,7 +334,7 @@ def ventana_pokemon():
     #boton para elegir el nombre
     boton_nombre = Button(canvas_menu, text="Elegir nombre", command=nombre)
     boton_nombre.place(x=10, y=500)
-    boton_batalla = Button(canvas_menu, text="Comenzar batalla", command=lambda: (ventana_batalla(), musica_batalla("batalla.wav")))
+    boton_batalla = Button(canvas_menu, text="Comenzar batalla", command=lambda: (ventana_batalla()))
     boton_batalla.place(x=150, y=500)
 
 def estadisticas_venusaur():
@@ -606,6 +606,7 @@ def nombre():
     def guardar_nombre():
         global nombre_jugador
         nombre_jugador = entry_nombre.get()
+        canvas_menu.nombre_jugador = nombre_jugador
         print("Nombre del jugador:", nombre_jugador)
         ventana_nombre.destroy()
     ventana_nombre = Toplevel()
@@ -622,11 +623,15 @@ def ventana_batalla():
     if len(pokemones_jugador) < 3:
         ventana_error_batalla()
         return
+    if not hasattr(canvas_menu, 'nombre_jugador') or canvas_menu.nombre_jugador == "":
+        ventana_error_batalla()
+        return
     for w in canvas_menu.winfo_children():
         try:
             w.destroy()
         except Exception:
             pass
+    musica_batalla("batalla.wav")
     canvas_menu.delete("all")
     fondo_batalla = asset_path(BACKGROUNDS_DIR, "fondo_batalla.png")
     fondo_batalla_img = PhotoImage(file=fondo_batalla)
@@ -989,7 +994,7 @@ def ventana_error_batalla():
     ventana_error = Toplevel()
     ventana_error.title("Error")
     ventana_error.geometry("300x200")
-    label_error = Label(ventana_error, text="Debes seleccionar 3 pokemones, un personaje y un nombre antes de comenzar la batalla", font=('Arial', 12), wraplength=280)
+    label_error = Label(ventana_error, text="Debes seleccionar 3 pokemones, y un nombre antes de comenzar la batalla", font=('Arial', 12), wraplength=280)
     label_error.pack(pady=10)
 
 ventana = Tk()
