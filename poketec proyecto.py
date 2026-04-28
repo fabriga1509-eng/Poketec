@@ -62,6 +62,8 @@ from tkinter import *
 from os import path #para los archivos de audio e imágenes
 from time import sleep 
 import random 
+import json
+
 
 # Ruta base del script (útil para localizar el archivo de audio)
 BASE_DIR = path.dirname(path.abspath(__file__))
@@ -71,11 +73,26 @@ ASSETS_DIR = path.join(PROJECT_ROOT, 'assets')  # mantenido como alternativa
 SOUNDS_DIR = path.join(PROJECT_ROOT, 'musica')
 BACKGROUNDS_DIR = path.join(PROJECT_ROOT, 'backgrounds')
 SPRITES_DIR = path.join(PROJECT_ROOT, 'sprites')
+PUNTAJES_FILE = path.join(PROJECT_ROOT, 'puntajes.json')  # archivo para guardar los puntajes
+
 # Nombre del archivo de música dentro de la carpeta 'Smogon'. Cambia esto según tu archivo.
 MUSIC_FILENAME = 'titulo.wav'  # usa WAV para reproducir con winsound (builtin en Windows)
 
 import threading # para ejecutar la música en un hilo separado y evitar bloquear la interfaz
 import platform # para detectar el sistema operativo y usar el backend de audio adecuado
+
+def cargar_puntajes():
+    try:
+        with open(PUNTAJES_FILE, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []  # si el archivo no existe, devolver una lista vacía
+
+def guardar_puntaje(nombre, puntaje):
+    puntajes = cargar_puntajes()
+    puntajes.append({"nombre": nombre, "puntaje": puntaje})
+    puntajes = sorted(puntajes, key=lambda x: x["puntaje"], reverse=True)[:10]
+    with open(PUNTAJES_FILE, "w") as f: json.dump(puntajes, f)
 
 # helper para obtener rutas de assets
 def asset_path(dir_path, filename):
@@ -529,8 +546,17 @@ def ventana_puntajes(): #muestra la ventana de puntajes, por ahora solo es un pl
     ventana_puntaje = Toplevel()
     ventana_puntaje.title("Puntajes")
     ventana_puntaje.geometry("300x400")
-    label_puntajes = Label(ventana_puntaje, text="Mejores Puntajes", font=('Arial', 12))
+    
+    label_puntajes = Label(ventana_puntaje, text="Mejores Puntajes", font=('Arial', 14, 'bold'))
     label_puntajes.pack(pady=10)
+    
+    puntajes = cargar_puntajes()
+    
+    if len(puntajes) == 0:
+        Label(ventana_puntaje, text="No hay puntajes aún", font=('Arial', 12)).pack(pady=5)
+    else:
+        for i, p in enumerate(puntajes):
+            Label(ventana_puntaje,text=f"{i+1}. {p['nombre']} - {p['puntaje']}",font=('Arial', 12)).pack(pady=5)
     boton_cerrar = Button(ventana_puntaje, text="Cerrar", command=ventana_puntaje.destroy)
     boton_cerrar.pack(pady=10)
 
@@ -624,6 +650,7 @@ def ventana_batalla():
             boton_continuar2 = Button(canvas_menu, text="Continuar", command=lambda: (batalla_continuar2(), print("Continuar batalla")))
             boton_continuar2.place(x=10, y=500)
             def batalla_continuar2():
+                canvas_menu.puntaje = 0
                 canvas_menu.turno_actual = 0
                 #Sistema de batalla
                 def sistema_batalla(atacante, defensor):
@@ -644,6 +671,8 @@ def ventana_batalla():
                     print(atacante, "ataca a", defensor, "y le hace", daño, "de daño. HP restante de", defensor, ":", stats[defensor]["HP"])
                     actualizar_vida()
                 def actualizar_vida():
+                    if len(pokemones_IA) == 0:  # si no quedan pokemones de la IA no actualices
+                        return
                     label_vida_usuario.config(text=f"Tu {pokemon_activo} HP: {stats[pokemon_activo]['HP']}")
                     label_vida_steven.config(text=f"Steven {pokemones_IA[0]} HP: {stats[pokemones_IA[0]]['HP']}")
                 def turno_usuario():
@@ -661,6 +690,8 @@ def ventana_batalla():
                     sistema_batalla(pokemon_activo, pokemones_IA[0])
                     print("Atacaste con", pokemon_activo)
                     if not ia_defender and stats[pokemones_IA[0]]["HP"] > 0:
+                        canvas_menu.puntaje += 1
+                        print(canvas_menu.puntaje)
                         sistema_batalla(pokemones_IA[0], pokemon_activo)
                     stats[pokemones_IA[0]]["Defendiendo"] = False
                     stats[pokemon_activo]["Defendiendo"] = False
@@ -671,6 +702,8 @@ def ventana_batalla():
                     actualizar_vida()
                 def defensa_usuario():
                     canvas_menu.turno_actual += 1
+                    canvas_menu.puntaje += 0.5
+                    print(canvas_menu.puntaje)
                     print(canvas_menu.turno_actual)
                     if canvas_menu.turno_actual >= turno_limite:
                         canvas_menu.turno_actual = 0
@@ -686,6 +719,8 @@ def ventana_batalla():
                 def defender(pokemon):
                     stats[pokemon]["Defendiendo"] = True
                 def KO(defensor):
+                    canvas_menu.boton_defender.destroy()
+                    canvas_menu.boton_atacar.destroy()
                     if defensor in pokemones_jugador:
                         canvas_menu.turno_actual = 0
                         pokemones_jugador.remove(defensor)
@@ -697,36 +732,46 @@ def ventana_batalla():
                         label_ko.place(x=10, y=150)
                         canvas_menu.turno_actual = 0
                         def agregar_pokemon():
+                            canvas_menu.puntaje += 1
+                            print(canvas_menu.puntaje)
                             pokemones_jugador.append(defensor)
                             print(pokemones_jugador)
-                            pokemones_IA.pop(0)
-                            print(pokemones_IA)
                             stats[defensor]["HP"] = 100
                             label_ko.destroy()
                             boton_agregar.destroy()
                             boton_no_agregar.destroy()
                             canvas_menu.delete(canvas_menu.pokemonia_id)
                             canvas_menu.pokemonia = None
+                            cambios_pokemon_IA()
                             canvas_menu.after(500)
-                            pokemon_ia()
                             actualizar_vida()
                         def no_agregar():
-                            pokemones_IA.pop(0)
-                            print(pokemones_IA)
+                            canvas_menu.puntaje += 0.5
+                            print(canvas_menu.puntaje)
                             label_ko.destroy()
                             boton_agregar.destroy()
                             boton_no_agregar.destroy()
                             canvas_menu.delete(canvas_menu.pokemonia_id)  # ✅ usa el ID
                             canvas_menu.pokemonia = None 
+                            cambios_pokemon_IA()
                             canvas_menu.after(500)
-                            pokemon_ia()
                             actualizar_vida()
+                        def cambios_pokemon_IA():
+                            pokemones_IA.pop(0)
+                            print(pokemones_IA)
+                            if len(pokemones_IA) == 0:
+                                victoria()
+                                return
+                            pokemon_ia()
+                            mostrar_botones()
                         canvas_menu.after(500)
                         boton_agregar = Button(canvas_menu, text="Si", command=agregar_pokemon)
                         boton_agregar.place(x=10, y=180)
                         boton_no_agregar = Button(canvas_menu, text="No", command=no_agregar)
                         boton_no_agregar.place(x=60, y=180)
                 def ko_usuario():
+                    canvas_menu.puntaje -= 0.5
+                    print(canvas_menu.puntaje)
                     label_ko_usuario = Label(canvas_menu, text="Tu Pokémon ha sido derrotado\nElige otro Pokémon", font=('Arial', 12), bg='white')
                     label_ko_usuario.place(x=10, y=150)
                     botones_pokemon = []
@@ -749,6 +794,7 @@ def ventana_batalla():
                     canvas_menu.delete(canvas_menu.pokemonid)
                     for b in botones:
                         b.destroy()
+                    mostrar_botones()
                     actualizar_vida()
                 def cambio_forzado():
                     label_cambio = Label(canvas_menu, text="¡TIEMPO DE CAMBIO! Elige otro Pokémon", font=('Arial', 12), bg='white')
@@ -783,7 +829,11 @@ def ventana_batalla():
                     boton_atacar.place(x=10, y=110)
                     boton_defender = Button(canvas_menu, text="Defender", command=lambda: (defensa_usuario(), print("Defendiste con", pokemon_seleccionado)))
                     boton_defender.place(x=80, y=110)
+                    canvas_menu.boton_atacar = boton_atacar
+                    canvas_menu.boton_defender = boton_defender
                 def pokemon_ia():
+                    if len(pokemones_IA) == 0:  # si no quedan pokemones de la IA no actualices
+                        return
                     pokemonia_img = pokemones_IA[0]
                     if pokemonia_img == "Slowbro":
                         pokemonia_img = asset_path(SPRITES_DIR, "Spr_1g_080.png")
@@ -807,13 +857,16 @@ def ventana_batalla():
                     pokemon_canvas_id = canvas_menu.create_image(400, 100, anchor=NW, image=pokemonia_img)
                     canvas_menu.pokemonia = pokemonia_img
                     canvas_menu.pokemonia_id = pokemon_canvas_id
+                    if hasattr(canvas_menu, 'label_prebatalla') and canvas_menu.label_prebatalla.winfo_exists():
+                        canvas_menu.label_prebatalla.config(text=f"Steven saca a {pokemones_IA[0]}")
+                    else:
+                        canvas_menu.label_prebatalla = Label(canvas_menu, text=f"Steven saca a {pokemones_IA[0]}", font=('Arial', 12), bg='white')
+                        canvas_menu.label_prebatalla.place(x=10, y=10)
                 boton_continuar2.destroy()
                 canvas_menu.delete(canvas_menu.Steven_id)
                 label_batalla.destroy()
                 label_seleccion.destroy()
                 pokemon_ia()
-                label_prebatalla = Label(canvas_menu, text=f"Steven saca a {pokemones_IA[0]}", font=('Arial', 12), bg='white')
-                label_prebatalla.place(x=10, y=10)
                 label_vida_usuario = Label(canvas_menu, text=f"Tu {pokemon_seleccionado} HP: {stats[pokemon_seleccionado]['HP']}", font=('Arial', 12), bg='white')
                 label_vida_usuario.place(x=10, y=50)
                 label_vida_steven = Label(canvas_menu, text=f"Steven {pokemones_IA[0]} HP: {stats[pokemones_IA[0]]['HP']}", font=('Arial', 12), bg='white')
@@ -821,6 +874,21 @@ def ventana_batalla():
                 canvas_menu.after(1000, mostrar_botones)  # espera 2 segundos antes de mostrar los botones de acción
     boton_continuar = Button(canvas_menu, text="Continuar", command=continuar_batalla)
     boton_continuar.place(x=10, y=500)
+
+def victoria():
+    for w in canvas_menu.winfo_children():
+        try:
+            w.destroy()
+        except Exception:
+            pass
+    canvas_menu.delete("all")
+    fondo_victoria = asset_path(BACKGROUNDS_DIR, "fondo puntaje.png")
+    fondo_victoria_img = PhotoImage(file=fondo_victoria)
+    canvas_menu.create_image(0, 0, anchor=NW, image=fondo_victoria_img)
+    canvas_menu.fondo_victoria = fondo_victoria_img
+    label_victoria = Label(canvas_menu, text=f"¡Victoria! Tu puntaje final es: {canvas_menu.puntaje}", font=('Arial', 12), bg='white')
+    label_victoria.place(x=10, y=10)
+    guardar_puntaje(nombre_jugador, canvas_menu.puntaje)
 
 #función para reproducir música
 
