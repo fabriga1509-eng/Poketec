@@ -84,9 +84,14 @@ import platform # para detectar el sistema operativo y usar el backend de audio 
 def cargar_puntajes():
     try:
         with open(PUNTAJES_FILE, 'r') as f:
-            return json.load(f)
+            contenido = f.read()
+            if not contenido:  # ← si el archivo está vacío
+                return []
+            return json.loads(contenido)
     except FileNotFoundError:
-        return []  # si el archivo no existe, devolver una lista vacía
+        return []
+    except json.JSONDecodeError:  # ← si el archivo tiene contenido inválido
+        return []
 
 def guardar_puntaje(nombre, puntaje):
     puntajes = cargar_puntajes()
@@ -252,7 +257,7 @@ def ventana_pokemon():
     venasaur_item = canvas_menu.create_image(25, 100, anchor=W, image=venasaur_img)
     canvas_menu.venasaur_photo = venasaur_img # mantener referencia para evitar garbage
     canvas_menu.venasaur_item = venasaur_item # mantener imagen para usar despues
-    boton_info_venasaur = Button(canvas_menu, text="Info", command=estadisticas_venasour)
+    boton_info_venasaur = Button(canvas_menu, text="Info", command=estadisticas_venusaur)
     boton_info_venasaur.place(x=60, y=160)
     #Charizard
     charizard = asset_path(SPRITES_DIR, "Spr_1g_006.png")
@@ -332,25 +337,28 @@ def ventana_pokemon():
     boton_batalla = Button(canvas_menu, text="Comenzar batalla", command=lambda: (ventana_batalla(), musica_batalla("batalla.wav")))
     boton_batalla.place(x=150, y=500)
 
-def estadisticas_venasour():
-    def selección_venasour():
+def estadisticas_venusaur():
+    def selección_venusaur():
         global pokemones_jugador
         if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
-            ventana_venasour.destroy()
+            ventana_venusaur.destroy()
+        elif "Venusaur" in pokemones_jugador:
+            ventana_error_pokemon()
+            ventana_venusaur.destroy()
         else:
             pokemones_jugador.append("Venusaur")
-        print("Pokemones seleccionado: ", pokemones_jugador)
-    ventana_venasour = Toplevel()
-    ventana_venasour.title("Estadísticas de Venusaur")
-    ventana_venasour.geometry("300x400")
-    label_venasour = Label(ventana_venasour, text="Estadísticas de Venusaur", font=('Arial', 12))
-    label_venasour.pack(pady=10)
-    label_stats = Label(ventana_venasour, text= f"HP: {stats['Venusaur']['HP']}\n Attack: {stats['Venusaur']['Attack']}\n Defense: {stats['Venusaur']['Defense']}", font=('Arial', 10))
+            print("Pokemones seleccionado: ", pokemones_jugador)
+    ventana_venusaur = Toplevel()
+    ventana_venusaur.title("Estadísticas de Venusaur")
+    ventana_venusaur.geometry("300x400")
+    label_venusaur = Label(ventana_venusaur, text="Estadísticas de Venusaur", font=('Arial', 12))
+    label_venusaur.pack(pady=10)
+    label_stats = Label(ventana_venusaur, text= f"HP: {stats['Venusaur']['HP']}\n Attack: {stats['Venusaur']['Attack']}\n Defense: {stats['Venusaur']['Defense']}", font=('Arial', 10))
     label_stats.pack(pady=10)
-    boton_cerrar = Button(ventana_venasour, text="Cerrar", command=ventana_venasour.destroy)
+    boton_cerrar = Button(ventana_venusaur, text="Cerrar", command=ventana_venusaur.destroy)
     boton_cerrar.pack(pady=10)
-    boton_seleccionar = Button(ventana_venasour, text="Seleccionar", command=lambda: (selección_venasour(), ventana_venasour.destroy()))
+    boton_seleccionar = Button(ventana_venusaur, text="Seleccionar", command=lambda: (selección_venusaur(), ventana_venusaur.destroy()))
     boton_seleccionar.pack(pady=10)
 
 def estadisticas_charizard():
@@ -359,9 +367,12 @@ def estadisticas_charizard():
         if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_charizard.destroy()
+        elif "Charizard" in pokemones_jugador:
+            ventana_error_pokemon()
+            ventana_charizard.destroy()
         else:
             pokemones_jugador.append("Charizard")
-        print("Pokemones seleccionado: ", pokemones_jugador)
+            print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_charizard = Toplevel()
     ventana_charizard.title("Estadísticas de Charizard")
     ventana_charizard.geometry("300x400")
@@ -380,9 +391,12 @@ def estadisticas_blastoise():
         if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_blastoise.destroy()
+        elif "Blastoise" in pokemones_jugador:
+            ventana_error_pokemon()
+            ventana_blastoise.destroy()
         else:
             pokemones_jugador.append("Blastoise")
-        print("Pokemones seleccionado: ", pokemones_jugador)
+            print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_blastoise = Toplevel()
     ventana_blastoise.title("Estadísticas de Blastoise")
     ventana_blastoise.geometry("300x400")
@@ -401,9 +415,12 @@ def estadisticas_pidgeot():
         if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_pidgeot.destroy()
+        elif "Pidgeot" in pokemones_jugador:
+            ventana_error_pokemon()
+            ventana_pidgeot.destroy()
         else:
             pokemones_jugador.append("Pidgeot")
-        print("Pokemones seleccionado: ", pokemones_jugador)
+            print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_pidgeot = Toplevel()
     ventana_pidgeot.title("Estadísticas de Pidgeot")
     ventana_pidgeot.geometry("300x400")
@@ -422,9 +439,12 @@ def estadisticas_rydhon():
         if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_rydhon.destroy()
+        elif "Rhydon" in pokemones_jugador:
+            ventana_error_pokemon()
+            ventana_rydhon.destroy()
         else:
             pokemones_jugador.append("Rhydon")
-        print("Pokemones seleccionado: ", pokemones_jugador)
+            print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_rydhon = Toplevel()
     ventana_rydhon.title("Estadísticas de Rhydon")
     ventana_rydhon.geometry("300x400")
@@ -443,9 +463,12 @@ def estadisticas_chansey():
         if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_chansey.destroy()
+        elif "Chansey" in pokemones_jugador:
+            ventana_error_pokemon()
+            ventana_chansey.destroy()
         else:
             pokemones_jugador.append("Chansey")
-        print("Pokemones seleccionado: ", pokemones_jugador)
+            print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_chansey = Toplevel()
     ventana_chansey.title("Estadísticas de Chansey")
     ventana_chansey.geometry("300x400")
@@ -464,9 +487,12 @@ def estadisticas_snorlax():
         if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_snorlax.destroy()
+        elif "Snorlax" in pokemones_jugador:
+            ventana_error_pokemon()
+            ventana_snorlax.destroy()
         else:
             pokemones_jugador.append("Snorlax")
-        print("Pokemones seleccionado: ", pokemones_jugador)
+            print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_snorlax = Toplevel()
     ventana_snorlax.title("Estadísticas de Snorlax")
     ventana_snorlax.geometry("300x400")
@@ -485,9 +511,12 @@ def estadisticas_pikachu():
         if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_pikachu.destroy()
+        elif "Pikachu" in pokemones_jugador:
+            ventana_error_pokemon()
+            ventana_pikachu.destroy()
         else:
             pokemones_jugador.append("Pikachu")
-        print("Pokemones seleccionado: ", pokemones_jugador)
+            print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_pikachu = Toplevel()
     ventana_pikachu.title("Estadísticas de Pikachu")
     ventana_pikachu.geometry("300x400")
@@ -506,9 +535,12 @@ def estadisticas_nidoking():
         if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_nidoking.destroy()
+        elif "Nidoking" in pokemones_jugador:
+            ventana_error_pokemon()
+            ventana_nidoking.destroy()
         else:
             pokemones_jugador.append("Nidoking")
-        print("Pokemones seleccionado: ", pokemones_jugador)
+            print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_nidoking = Toplevel()
     ventana_nidoking.title("Estadísticas de Nidoking")
     ventana_nidoking.geometry("300x400")
@@ -527,9 +559,12 @@ def estadisticas_machamp():
         if len(pokemones_jugador) == 3:
             ventana_error_pokemon()
             ventana_machamp.destroy()
+        elif "Machamp" in pokemones_jugador:
+            ventana_error_pokemon()
+            ventana_machamp.destroy()
         else:
             pokemones_jugador.append("Machamp")
-        print("Pokemones seleccionado: ", pokemones_jugador)
+            print("Pokemones seleccionado: ", pokemones_jugador)
     ventana_machamp = Toplevel()
     ventana_machamp.title("Estadísticas de Machamp")
     ventana_machamp.geometry("300x400")
@@ -770,9 +805,9 @@ def ventana_batalla():
                             mostrar_botones()
                         canvas_menu.after(500)
                         boton_agregar = Button(canvas_menu, text="Si", command=agregar_pokemon)
-                        boton_agregar.place(x=10, y=180)
+                        boton_agregar.place(x=10, y=220)
                         boton_no_agregar = Button(canvas_menu, text="No", command=no_agregar)
-                        boton_no_agregar.place(x=60, y=180)
+                        boton_no_agregar.place(x=60, y=220)
                 def ko_usuario():
                     canvas_menu.puntaje -= 0.5
                     if len(pokemones_jugador) == 0:
@@ -798,7 +833,6 @@ def ventana_batalla():
                     cargar_sprite_pokemon(p)
                     mostrar_botones()
                     actualizar_vida()
-
                 def cambio_forzado():
                     label_cambio = Label(canvas_menu, text="¡TIEMPO DE CAMBIO! Elige otro Pokémon", font=('Arial', 12), bg='white')
                     label_cambio.place(x=10, y=150)
@@ -910,13 +944,7 @@ def derrota():
 
 #función para reproducir música
 
-def setup_music(window, filename=MUSIC_FILENAME): #Investigar el funcionamiento para usarlo en otras ventanas
-    """Reproducir música de fondo usando únicamente winsound (builtin en Windows).
-
-    Nota: winsound solo reproduce WAV. Si tienes un MP3, conviértelo a WAV
-    (por ejemplo con herramientas como Audacity o ffmpeg) y colócalo en la carpeta 'Smogon'.
-    """
-    # buscar en varias ubicaciones comunes: en SOUNDS_DIR, BASE_DIR y en BASE_DIR/Smogon
+def setup_music(window, filename=MUSIC_FILENAME):
     candidates = [
         path.join(SOUNDS_DIR, filename),
         path.join(BASE_DIR, filename),
