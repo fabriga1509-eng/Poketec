@@ -798,13 +798,7 @@ def ventana_batalla():
                     cargar_sprite_pokemon(p)
                     mostrar_botones()
                     actualizar_vida()
-                def destroy_botones_pokemon(botones):
-                    canvas_menu.after(500)
-                    canvas_menu.delete(canvas_menu.pokemonid)
-                    for b in botones:
-                        b.destroy()
-                    mostrar_botones()
-                    actualizar_vida()
+
                 def cambio_forzado():
                     label_cambio = Label(canvas_menu, text="¡TIEMPO DE CAMBIO! Elige otro Pokémon", font=('Arial', 12), bg='white')
                     label_cambio.place(x=10, y=150)
@@ -813,12 +807,12 @@ def ventana_batalla():
                     canvas_menu.after(500, lambda: (label_cambio.destroy(), elegir_pokemon_cambio()))
                 def elegir_pokemon_cambio():
                     label_elegir = Label(canvas_menu, text="Elige tu nuevo Pokémon", font=('Arial', 12), bg='white')
-                    label_elegir.place(x=10, y=180)
+                    label_elegir.place(x=10, y=170)
                     botones = []
                     canvas_menu.after(500)
                     for i,pokemon in enumerate(pokemones_jugador):
                         boton = Button(canvas_menu, text=pokemon, command=lambda p=pokemon: (confirmar_cambio(p,botones, label_elegir), print("Cambiaste a", p)))
-                        boton.place(x=10, y=180 + i*30)
+                        boton.place(x=10, y=190 + i*30)
                         botones.append(boton)
                 def confirmar_cambio(nuevo_pokemon, botones, label_elegir):
                     global pokemon_activo
