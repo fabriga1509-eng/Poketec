@@ -666,15 +666,19 @@ def ventana_batalla():
                         stats[defensor]["HP"] = 0
                         print(defensor, "ha sido derrotado")
                         KO(defensor)
+                        return
                     if stats[defensor]["HP"] <= 0:
                         print(defensor, "ha sido derrotado")
                     print(atacante, "ataca a", defensor, "y le hace", daño, "de daño. HP restante de", defensor, ":", stats[defensor]["HP"])
                     actualizar_vida()
                 def actualizar_vida():
-                    if len(pokemones_IA) == 0:  # si no quedan pokemones de la IA no actualices
+                    if len(pokemones_IA) == 0 or len(pokemones_jugador) == 0:
+                        return  # si no quedan pokemones no intentes actualizar los labels
+                    try:
+                        label_vida_usuario.config(text=f"Tu {pokemon_activo} HP: {stats[pokemon_activo]['HP']}")
+                        label_vida_steven.config(text=f"Steven {pokemones_IA[0]} HP: {stats[pokemones_IA[0]]['HP']}")
+                    except Exception:
                         return
-                    label_vida_usuario.config(text=f"Tu {pokemon_activo} HP: {stats[pokemon_activo]['HP']}")
-                    label_vida_steven.config(text=f"Steven {pokemones_IA[0]} HP: {stats[pokemones_IA[0]]['HP']}")
                 def turno_usuario():
                     canvas_menu.turno_actual += 1
                     print(canvas_menu.turno_actual)
@@ -771,6 +775,9 @@ def ventana_batalla():
                         boton_no_agregar.place(x=60, y=180)
                 def ko_usuario():
                     canvas_menu.puntaje -= 0.5
+                    if len(pokemones_jugador) == 0:
+                        derrota()
+                        return
                     print(canvas_menu.puntaje)
                     label_ko_usuario = Label(canvas_menu, text="Tu Pokémon ha sido derrotado\nElige otro Pokémon", font=('Arial', 12), bg='white')
                     label_ko_usuario.place(x=10, y=150)
@@ -783,11 +790,13 @@ def ventana_batalla():
                     return botones_pokemon
                 def cambiar_pokemon(p, botones, label_ko_usuario):
                     global pokemon_activo
-                    pokemon_activo = p  # ← actualiza el pokémon activo
-                    destroy_botones_pokemon(botones)
+                    pokemon_activo = p
                     label_ko_usuario.destroy()
-                    canvas_menu.after(500)
+                    canvas_menu.delete(canvas_menu.pokemonid)
+                    for b in botones:
+                        b.destroy()
                     cargar_sprite_pokemon(p)
+                    mostrar_botones()
                     actualizar_vida()
                 def destroy_botones_pokemon(botones):
                     canvas_menu.after(500)
@@ -887,6 +896,21 @@ def victoria():
     canvas_menu.create_image(0, 0, anchor=NW, image=fondo_victoria_img)
     canvas_menu.fondo_victoria = fondo_victoria_img
     label_victoria = Label(canvas_menu, text=f"¡Victoria! Tu puntaje final es: {canvas_menu.puntaje}", font=('Arial', 12), bg='white')
+    label_victoria.place(x=10, y=10)
+    guardar_puntaje(nombre_jugador, canvas_menu.puntaje)
+
+def derrota():
+    for w in canvas_menu.winfo_children():
+        try:
+            w.destroy()
+        except Exception:
+            pass
+    canvas_menu.delete("all")
+    fondo_victoria = asset_path(BACKGROUNDS_DIR, "fondo puntaje.png")
+    fondo_victoria_img = PhotoImage(file=fondo_victoria)
+    canvas_menu.create_image(0, 0, anchor=NW, image=fondo_victoria_img)
+    canvas_menu.fondo_victoria = fondo_victoria_img
+    label_victoria = Label(canvas_menu, text=f"¡Derrota! :( Tu puntaje final es: {canvas_menu.puntaje}", font=('Arial', 12), bg='white')
     label_victoria.place(x=10, y=10)
     guardar_puntaje(nombre_jugador, canvas_menu.puntaje)
 
