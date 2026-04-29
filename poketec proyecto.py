@@ -19,7 +19,7 @@ stats = {
     "Machamp": {"HP": 90, "Attack": 130, "Defense": 80, "Defendiendo": False},
     "Mewtwo": {"HP": 106, "Attack": 150, "Defense": 90, "Defendiendo": False},
     "Moltres": {"HP": 90, "Attack": 110, "Defense": 90, "Defendiendo": False},
-    "Rapidash": {"HP": 65, "Attack": 100, "Defense": 70, "Defendiendo": False},
+    "Rapidash": {"HP": 75, "Attack": 100, "Defense": 70, "Defendiendo": False},
     "Articuno": {"HP": 90, "Attack": 85, "Defense": 100, "Defendiendo": False},
     "Zapdos": {"HP": 90, "Attack": 100, "Defense": 85, "Defendiendo": False},
     "Dragonite": {"HP": 91, "Attack": 130, "Defense": 95, "Defendiendo": False},
@@ -60,7 +60,6 @@ turno_limite = 5
 
 from tkinter import *
 from os import path #para los archivos de audio e imágenes
-from time import sleep 
 import random 
 import json
 
@@ -76,9 +75,8 @@ SPRITES_DIR = path.join(PROJECT_ROOT, 'sprites')
 PUNTAJES_FILE = path.join(PROJECT_ROOT, 'puntajes.json')  # archivo para guardar los puntajes
 
 # Nombre del archivo de música dentro de la carpeta 'Smogon'. Cambia esto según tu archivo.
-MUSIC_FILENAME = 'titulo.wav'  # usa WAV para reproducir con winsound (builtin en Windows)
+MUSIC_FILENAME = 'titulo.wav' 
 
-import threading # para ejecutar la música en un hilo separado y evitar bloquear la interfaz
 import platform # para detectar el sistema operativo y usar el backend de audio adecuado
 
 def cargar_puntajes():
@@ -971,10 +969,7 @@ def setup_music(window, filename=MUSIC_FILENAME):
     if ext != 'wav':
         print(f"Formato no compatible para el backend integrado: .{ext}. Convierte a WAV o instala pygame/playsound.")
         return
-    # solo en Windows
-    if platform.system() != 'Windows':
-        print('winsound solo está disponible en Windows. En otros sistemas instala pygame o playsound.')
-        return
+    
     try:
         import winsound
         # iniciar reproducción en background en loop
