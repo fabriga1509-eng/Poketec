@@ -77,7 +77,6 @@ PUNTAJES_FILE = path.join(PROJECT_ROOT, 'puntajes.json')  # archivo para guardar
 # Nombre del archivo de música dentro de la carpeta 'Smogon'. Cambia esto según tu archivo.
 MUSIC_FILENAME = 'titulo.wav' 
 
-import platform # para detectar el sistema operativo y usar el backend de audio adecuado
 
 def cargar_puntajes():
     try:
@@ -840,7 +839,7 @@ def ventana_batalla():
                     label_cambio = Label(canvas_menu, text="¡TIEMPO DE CAMBIO! Elige otro Pokémon", font=('Arial', 12), bg='white')
                     label_cambio.place(x=10, y=150)
                     if len(pokemones_IA) > 1:
-                        pokemones_IA.append(pokemones_IA.pop(0))  # mueve el primer Pokémon al final de la lista
+                        pokemones_IA.append(pokemones_IA.pop(0))
                     canvas_menu.after(500, lambda: (label_cambio.destroy(), elegir_pokemon_cambio()))
                 def elegir_pokemon_cambio():
                     label_elegir = Label(canvas_menu, text="Elige tu nuevo Pokémon", font=('Arial', 12), bg='white')
@@ -969,7 +968,6 @@ def setup_music(window, filename=MUSIC_FILENAME):
     if ext != 'wav':
         print(f"Formato no compatible para el backend integrado: .{ext}. Convierte a WAV o instala pygame/playsound.")
         return
-    
     try:
         import winsound
         # iniciar reproducción en background en loop
